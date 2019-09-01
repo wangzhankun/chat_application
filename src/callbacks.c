@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-01 06:25:12 -0700
+ * @LastEditTime: 2019-09-01 08:37:10 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -19,13 +19,24 @@
  */
  void insert_sticker(GtkWidget *widget,GdkEventButton *event, Emoji *sinfo)
  {
-    g_printf("njnj\n");
+    
+    char head[30]="./bin/sticker";
+	char tail[10]=".gif";
+    for(int i=0;i<3;i++)
+    head[13+i]=sinfo->str[i];
+    for(int i=0;i<4;i++)
+    head[16+i]=tail[i];
+	g_printf("%s\n",head);
+   
     GtkTextIter end;
     //获取缓冲区的尾部
     gtk_text_buffer_get_end_iter(sinfo->view_buffer,&end);
+    
+    GdkPixbuf *pixbuf=gdk_pixbuf_new_from_file(head,NULL);
+    gtk_text_buffer_insert_pixbuf(sinfo->view_buffer,&end,pixbuf);
     //向缓冲区插入数据
-    gtk_text_buffer_insert(sinfo->view_buffer,&end,sinfo->str,-1);
-
+   // gtk_text_buffer_insert(sinfo->view_buffer,&end,sinfo->str,-1);
+    
     GtkWidget *sticker_window = sinfo->sticker_window;
     Emoji **p = sinfo->spointer;
     int i;

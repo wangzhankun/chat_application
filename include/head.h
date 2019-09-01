@@ -10,6 +10,8 @@
  */
 ///////////////include库文件区/////////////
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <pthread.h>
 
