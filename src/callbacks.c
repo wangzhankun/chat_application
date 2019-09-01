@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-01 05:12:54 -0700
+ * @LastEditTime: 2019-09-01 05:50:52 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -17,20 +17,21 @@
  * @Param: 
  * @Return: 
  */
- void insert_sticker(GtkWidget *widget,GdkEventButton *event, struct sticker_info *sinfo)
+ void insert_sticker(GtkWidget *widget,GdkEventButton *event, Emoji *sinfo)
  {
-//     GtkTextIter end;
-//     //获取缓冲区的尾部
-//     gtk_text_buffer_get_end_iter(sinfo->view2_buffer,&end);
-//     //向缓冲区插入数据
-//     gtk_text_buffer_insert(sinfo->view2_buffer,&end,sinfo->str,-1);
+    g_printf("njnj\n");
+    GtkTextIter end;
+    //获取缓冲区的尾部
+    gtk_text_buffer_get_end_iter(sinfo->view2_buffer,&end);
+    //向缓冲区插入数据
+    gtk_text_buffer_insert(sinfo->view2_buffer,&end,sinfo->str,-1);
 
-//     GtkWidget *sticker_window = sinfo->sticker_window;
-//     struct sticker_info **p = sinfo->spointer;
-//     int i;
-//     for (i=0;i<6;i++) free(p[i]);
-//     free(p);
-//     gtk_widget_destroy(sticker_window);
+    GtkWidget *sticker_window = sinfo->sticker_window;
+    Emoji **p = sinfo->spointer;
+    int i;
+    for (i=0;i<6;i++) free(p[i]);
+    free(p);
+    gtk_widget_destroy(sticker_window);
 }
 
 /**
@@ -49,12 +50,10 @@ void destory_sticker_window(GtkWidget *widget,GdkEventCrossing *event,GtkWidget*
  * @Param: 
  * @Return: 
  */
-void PressStickerBtn(GtkWidget *widget, GdkEvent *event, struct text_view_info *viewinfo){
-    if(event->type == GDK_BUTTON_RELEASE){
+void PressStickerBtn(GtkWidget *widget, GdkEvent *event, TextView *viewinfo){
 
         GdkEventButton *event_button = (GdkEventButton *) event;
-        if(event_button->button == 1){
-            //显示表情包的界面
+           
             GtkWidget *sticker_window;
             GtkWidget *eventbox;
             GtkWidget *sbox1, *sbox2, *sbox3, *sbox4, *sbox5, *sbox6;  //盛放6个表情的eventbox
@@ -79,31 +78,43 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, struct text_view_info *
             sbox5 = gtk_event_box_new();
             sbox6 = gtk_event_box_new();
 
-            struct sticker_info **spointer = (struct sticker_info **)malloc(sizeof(struct sticker_info *)*6);
+            Emoji **spointer = (Emoji **)malloc(sizeof(Emoji *)*6);
 
-            struct sticker_info *sinfo1 = (struct sticker_info *)malloc(sizeof(struct sticker_info));
-            sinfo1->str = "/am";sinfo1->view2_buffer = viewinfo->view2_buffer;
-            sinfo1->sticker_window = sticker_window;sinfo1->spointer = spointer;
+            Emoji *sinfo1 = (Emoji *)malloc(sizeof(Emoji));
+            sinfo1->str = "/am";
+            sinfo1->view2_buffer = viewinfo->view2_buffer;
+            sinfo1->sticker_window = sticker_window;
+            sinfo1->spointer = spointer;
 
-            struct sticker_info *sinfo2 = (struct sticker_info *)malloc(sizeof(struct sticker_info));
-            sinfo2->str = "/dk";sinfo2->view2_buffer = viewinfo->view2_buffer;
-            sinfo2->sticker_window = sticker_window;sinfo2->spointer = spointer;
+            Emoji *sinfo2 = (Emoji *)malloc(sizeof(Emoji));
+            sinfo2->str = "/dk";
+            sinfo2->view2_buffer = viewinfo->view2_buffer;
+            sinfo2->sticker_window = sticker_window;
+            sinfo2->spointer = spointer;
 
-            struct sticker_info *sinfo3 = (struct sticker_info *)malloc(sizeof(struct sticker_info));
-            sinfo3->str = "/fd";sinfo3->view2_buffer = viewinfo->view2_buffer;
-            sinfo3->sticker_window = sticker_window;sinfo3->spointer = spointer;
+            Emoji *sinfo3 = (Emoji *)malloc(sizeof(Emoji));
+            sinfo3->str = "/fd";
+            sinfo3->view2_buffer = viewinfo->view2_buffer;
+            sinfo3->sticker_window = sticker_window;
+            sinfo3->spointer = spointer;
 
-            struct sticker_info *sinfo4 = (struct sticker_info *)malloc(sizeof(struct sticker_info));
-            sinfo4->str = "/sk";sinfo4->view2_buffer = viewinfo->view2_buffer;
-            sinfo4->sticker_window = sticker_window;sinfo4->spointer = spointer;
+            Emoji *sinfo4 = (Emoji *)malloc(sizeof(Emoji));
+            sinfo4->str = "/sk";
+            sinfo4->view2_buffer = viewinfo->view2_buffer;
+            sinfo4->sticker_window = sticker_window;
+            sinfo4->spointer = spointer;
 
-            struct sticker_info *sinfo5 = (struct sticker_info *)malloc(sizeof(struct sticker_info));
-            sinfo5->str = "/wx";sinfo5->view2_buffer = viewinfo->view2_buffer;
-            sinfo5->sticker_window = sticker_window;sinfo5->spointer = spointer;
+            Emoji *sinfo5 = (Emoji *)malloc(sizeof(Emoji));
+            sinfo5->str = "/wx";
+            sinfo5->view2_buffer = viewinfo->view2_buffer;
+            sinfo5->sticker_window = sticker_window;
+            sinfo5->spointer = spointer;
 
-            struct sticker_info *sinfo6 = (struct sticker_info *)malloc(sizeof(struct sticker_info));
-            sinfo6->str = "/zj";sinfo6->view2_buffer = viewinfo->view2_buffer;
-            sinfo6->sticker_window = sticker_window;sinfo6->spointer = spointer;
+            Emoji *sinfo6 = (Emoji *)malloc(sizeof(Emoji));
+            sinfo6->str = "/zj";
+            sinfo6->view2_buffer = viewinfo->view2_buffer;
+            sinfo6->sticker_window = sticker_window;
+            sinfo6->spointer = spointer;
 
             spointer[0] = sinfo1;
             spointer[1] = sinfo2;
@@ -112,12 +123,12 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, struct text_view_info *
             spointer[4] = sinfo5;
             spointer[5] = sinfo6;
 
-            g_signal_connect(G_OBJECT(sbox1),"button_press_event",G_CALLBACK(insert_sticker),sinfo1);
-            g_signal_connect(G_OBJECT(sbox2),"button_press_event",G_CALLBACK(insert_sticker),sinfo2);
-            g_signal_connect(G_OBJECT(sbox3),"button_press_event",G_CALLBACK(insert_sticker),sinfo3);
-            g_signal_connect(G_OBJECT(sbox4),"button_press_event",G_CALLBACK(insert_sticker),sinfo4);
-            g_signal_connect(G_OBJECT(sbox5),"button_press_event",G_CALLBACK(insert_sticker),sinfo5);
-            g_signal_connect(G_OBJECT(sbox6),"button_press_event",G_CALLBACK(insert_sticker),sinfo6);
+            g_signal_connect(G_OBJECT(sbox1),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo1);
+            g_signal_connect(G_OBJECT(sbox2),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo2);
+            g_signal_connect(G_OBJECT(sbox3),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo3);
+            g_signal_connect(G_OBJECT(sbox4),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo4);
+            g_signal_connect(G_OBJECT(sbox5),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo5);
+            g_signal_connect(G_OBJECT(sbox6),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo6);
 
             s1 = gtk_image_new_from_file("./bin/sticker/am.gif");
             s2 = gtk_image_new_from_file("./bin/sticker/dk.gif");
@@ -141,8 +152,6 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, struct text_view_info *
             gtk_table_attach_defaults(GTK_TABLE(table),sbox6,2,3,1,2);
             
             gtk_widget_show_all(sticker_window);
-        }
-    }
 }
 
 

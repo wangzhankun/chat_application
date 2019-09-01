@@ -4,14 +4,15 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-01 05:12:59 -0700
+ * @LastEditTime: 2019-09-01 05:36:03 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "callbacks.h"
+#include "interface.h"
 static GtkWidget* dialog = NULL;
-
+TextView SendText;
 GtkWidget* create_toolbar (GtkWidget* window);
 static gboolean on_drag_drop();
 static void on_drag_data_received(GtkWidget *widget, GdkDragContext *context,
@@ -27,7 +28,6 @@ GtkWidget* create_window(void)
 {
  
     GtkWidget* window;
-    GtkWidget* SendText;
     GtkWidget* scrolledwin;
     GtkWidget* box;
     GtkWidget* statusbar;
@@ -47,16 +47,16 @@ GtkWidget* create_window(void)
     toolbar = create_toolbar(window);
     gtk_box_pack_start(GTK_BOX(box),toolbar,0,1,0);
     scrolledwin = gtk_scrolled_window_new(NULL,NULL);
-    SendText = gtk_text_view_new();
+    SendText.view = gtk_text_view_new();
     gtk_box_pack_start(GTK_BOX(box),scrolledwin,TRUE,TRUE,0);
-    gtk_container_add(GTK_CONTAINER(scrolledwin),SendText);
-    gtk_text_view_set_editable(GTK_TEXT_VIEW(SendText),TRUE);
+    gtk_container_add(GTK_CONTAINER(scrolledwin),SendText.view);
+    gtk_text_view_set_editable(GTK_TEXT_VIEW(SendText.view),TRUE);
 
     // //拖拽
     GtkTargetEntry targets={"text/uri-list", GTK_TARGET_OTHER_APP,1 };    
-    gtk_drag_dest_set(SendText, GTK_DEST_DEFAULT_DROP, &targets,1, GDK_ACTION_COPY);   
-    g_signal_connect(G_OBJECT(SendText),"drag-data-received",G_CALLBACK(on_drag_data_received),NULL);    
-    g_signal_connect(G_OBJECT(SendText),"drag-drop",G_CALLBACK(on_drag_drop),NULL);
+    gtk_drag_dest_set(SendText.view, GTK_DEST_DEFAULT_DROP, &targets,1, GDK_ACTION_COPY);   
+    g_signal_connect(G_OBJECT(SendText.view),"drag-data-received",G_CALLBACK(on_drag_data_received),NULL);    
+    g_signal_connect(G_OBJECT(SendText.view),"drag-drop",G_CALLBACK(on_drag_drop),NULL);
 
     statusbar = gtk_statusbar_new();
     gtk_box_pack_start(GTK_BOX(box),statusbar,FALSE,FALSE,0);
@@ -84,7 +84,7 @@ GtkWidget* create_toolbar (GtkWidget* window)
 	gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
  
     sticker=gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), "", "发送表情", "Private", StickerIcon, 
-                                                        GTK_SIGNAL_FUNC (PressStickerBtn), NULL);
+                                                        GTK_SIGNAL_FUNC (PressStickerBtn), &SendText);
     OpenDocu=gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), "", "打开文件", "Private", DocuIcon, 
                                                         GTK_SIGNAL_FUNC (on_file_open_activate), NULL);                               
     return toolbar;

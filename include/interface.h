@@ -16,11 +16,11 @@ typedef struct sticker_info{
     GtkTextBuffer *view2_buffer; //文本缓冲区
     char *str;   //表情的名字
     struct sticker_info **spointer;
-}Stiker;
+}Emoji;
 
-struct text_view_info{
-    GtkWidget *view1, *view2;
+typedef struct text_view_info{
+    GtkWidget *view, *view2;
     GtkTextBuffer *view1_buffer,*view2_buffer;
-};
+}TextView;
 
 #endif
