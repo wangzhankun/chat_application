@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-01 05:50:52 -0700
+ * @LastEditTime: 2019-09-01 06:25:12 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,7 +13,7 @@
 
 /**
  * @Author: 王可欣
- * @Description: 插入表情
+ * @Description: 在输入框中插入表情
  * @Param: 
  * @Return: 
  */
@@ -22,9 +22,9 @@
     g_printf("njnj\n");
     GtkTextIter end;
     //获取缓冲区的尾部
-    gtk_text_buffer_get_end_iter(sinfo->view2_buffer,&end);
+    gtk_text_buffer_get_end_iter(sinfo->view_buffer,&end);
     //向缓冲区插入数据
-    gtk_text_buffer_insert(sinfo->view2_buffer,&end,sinfo->str,-1);
+    gtk_text_buffer_insert(sinfo->view_buffer,&end,sinfo->str,-1);
 
     GtkWidget *sticker_window = sinfo->sticker_window;
     Emoji **p = sinfo->spointer;
@@ -82,37 +82,37 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, TextView *viewinfo){
 
             Emoji *sinfo1 = (Emoji *)malloc(sizeof(Emoji));
             sinfo1->str = "/am";
-            sinfo1->view2_buffer = viewinfo->view2_buffer;
+            sinfo1->view_buffer = viewinfo->view_buffer;
             sinfo1->sticker_window = sticker_window;
             sinfo1->spointer = spointer;
 
             Emoji *sinfo2 = (Emoji *)malloc(sizeof(Emoji));
             sinfo2->str = "/dk";
-            sinfo2->view2_buffer = viewinfo->view2_buffer;
+            sinfo2->view_buffer = viewinfo->view_buffer;
             sinfo2->sticker_window = sticker_window;
             sinfo2->spointer = spointer;
 
             Emoji *sinfo3 = (Emoji *)malloc(sizeof(Emoji));
             sinfo3->str = "/fd";
-            sinfo3->view2_buffer = viewinfo->view2_buffer;
+            sinfo3->view_buffer = viewinfo->view_buffer;
             sinfo3->sticker_window = sticker_window;
             sinfo3->spointer = spointer;
 
             Emoji *sinfo4 = (Emoji *)malloc(sizeof(Emoji));
             sinfo4->str = "/sk";
-            sinfo4->view2_buffer = viewinfo->view2_buffer;
+            sinfo4->view_buffer = viewinfo->view_buffer;
             sinfo4->sticker_window = sticker_window;
             sinfo4->spointer = spointer;
 
             Emoji *sinfo5 = (Emoji *)malloc(sizeof(Emoji));
             sinfo5->str = "/wx";
-            sinfo5->view2_buffer = viewinfo->view2_buffer;
+            sinfo5->view_buffer = viewinfo->view_buffer;
             sinfo5->sticker_window = sticker_window;
             sinfo5->spointer = spointer;
 
             Emoji *sinfo6 = (Emoji *)malloc(sizeof(Emoji));
             sinfo6->str = "/zj";
-            sinfo6->view2_buffer = viewinfo->view2_buffer;
+            sinfo6->view_buffer = viewinfo->view_buffer;
             sinfo6->sticker_window = sticker_window;
             sinfo6->spointer = spointer;
 

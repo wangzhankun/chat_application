@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-01 05:36:03 -0700
+ * @LastEditTime: 2019-09-01 06:22:28 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -47,7 +47,9 @@ GtkWidget* create_window(void)
     toolbar = create_toolbar(window);
     gtk_box_pack_start(GTK_BOX(box),toolbar,0,1,0);
     scrolledwin = gtk_scrolled_window_new(NULL,NULL);
+    
     SendText.view = gtk_text_view_new();
+    SendText.view_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(SendText.view));
     gtk_box_pack_start(GTK_BOX(box),scrolledwin,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(scrolledwin),SendText.view);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(SendText.view),TRUE);

@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-01 05:13:18 -0700
+ * @LastEditTime: 2019-09-01 05:54:36 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,14 +13,14 @@
 GtkWidget* create_window( void );
 typedef struct sticker_info{
     GtkWidget *sticker_window;
-    GtkTextBuffer *view2_buffer; //文本缓冲区
+    GtkTextBuffer *view_buffer; //文本缓冲区
     char *str;   //表情的名字
     struct sticker_info **spointer;
 }Emoji;
 
 typedef struct text_view_info{
-    GtkWidget *view, *view2;
-    GtkTextBuffer *view1_buffer,*view2_buffer;
+    GtkWidget *view;
+    GtkTextBuffer *view_buffer;
 }TextView;
 
 #endif
