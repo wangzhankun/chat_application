@@ -4,25 +4,25 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-01 10:12:26 +0800
+ * @LastEditTime: 2019-09-01 11:40:35 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
+#include "actions.h"
+// #define PORT 8000
+// #define TEST
+// #define UDP
+// // #define TCP
+// #define SOCKET_PROTOCOL 0
 
-#define PORT 8000
-#define TEST
-#define UDP
-// #define TCP
-#define SOCKET_PROTOCOL 0
+// #ifdef UDP
+// #define SOCKET_TYPE SOCK_DGRAM
+// #endif
 
-#ifdef UDP
-#define SOCKET_TYPE SOCK_DGRAM
-#endif
-
-#ifdef TCP
-#define SOCKET_TYPE SOCK_STREAM
-#endif
+// #ifdef TCP
+// #define SOCKET_TYPE SOCK_STREAM
+// #endif
 
 /**
  * @Author: 王占坤
