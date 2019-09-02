@@ -14,6 +14,7 @@
 //显示表情的结构体
 
 gboolean on_window_delete_event (GtkWidget* widget,GdkEvent *event,gpointer data);
+void BackToLoading (GtkMenuItem* menuitem, gpointer data);
 void OpenSelectDocument (GtkMenuItem* menuitem, gpointer data);
 void PressStickerBtn(GtkWidget *widget, GdkEvent *event, struct text_view_info *viewinfo);
 void destory_sticker_window(GtkWidget *widget,GdkEventCrossing *event,GtkWidget* data);

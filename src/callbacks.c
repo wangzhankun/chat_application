@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-01 19:28:56 -0700
+ * @LastEditTime: 2019-09-02 03:38:25 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -228,5 +228,19 @@ void OpenSelectDocument (GtkMenuItem* menuitem,gpointer data)
                     "clicked", G_CALLBACK(CancelSelectDocument),NULL);
     gtk_widget_show(dialog);
     
+}
+
+/**
+ * @Author: 王可欣
+ * @Description: 返回登录界面
+ * @Param: 
+ * @Return: 
+ */
+void BackToLoading (GtkMenuItem* menuitem, gpointer data)
+{
+    GtkWidget *LoadingWindow;
+    LoadingWindow = CreateLoading();
+    g_signal_connect(G_OBJECT(LoadingWindow), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    gtk_widget_show(LoadingWindow);
 }
 
