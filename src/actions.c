@@ -4,25 +4,52 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-01 10:12:26 +0800
+/*
+ * @LastEditTime: 2019-09-02 14:49:00 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
-
-#define PORT 8000
-#define TEST
-#define UDP
+#include "actions.h"
+// #define PORT 8888
+// #define TEST
+// // #define UDP
 // #define TCP
-#define SOCKET_PROTOCOL 0
+// #define SOCKET_PROTOCOL 0
 
-#ifdef UDP
-#define SOCKET_TYPE SOCK_DGRAM
-#endif
+// #ifdef UDP
+// #define SOCKET_TYPE SOCK_DGRAM
+// #endif
 
-#ifdef TCP
-#define SOCKET_TYPE SOCK_STREAM
-#endif
+// #ifdef TCP
+// #define SOCKET_TYPE SOCK_STREAM
+// #endif
+
+/**
+ * @Author: 王占坤
+ * @Description: 在skf上创建一个到serv_addr的连接
+ * @Param: socketfd skf, 需要创建连接的socket句柄
+ * @Param: struct sockaddr* serv_addr 连接的目标地址
+ * @Param: int addr_len 目标地址大小
+ * @Return: 
+ * @Throw: 
+ */
+void createConnection(socketfd skf, struct sockaddr* serv_addr, size_t addr_len)
+{
+    if(serv_addr == NULL)
+    {
+        printf("地址不存在！\n");
+    }
+    int res = connect(skf, serv_addr, &addr_len);
+    if(res == -1)
+    {
+        perror("connect");
+        printf("create connection error: %s(errno: %d)\n", strerror(errno), errno);
+        exit(1);
+    }
+}
+
+>>>>>>> wangzhankun
 
 /**
  * @Author: 王占坤
@@ -35,14 +62,16 @@
 socketfd createSocket(int type, int protocol)
 {
     socketfd skf = socket(AF_INET, SOCK_STREAM, 0);
-    if(skf == -1)
+
+    if (skf == -1)
     {
+        perror("socket");
         printf("create socket error: %s(errno: %d)\n", strerror(errno), errno);
         exit(1);
     }
-    return skf;
+    else
+        return skf;
 }
-
 
 /**
  * @Author: 王占坤
@@ -61,9 +90,9 @@ void initialzeSocketaddr(struct sockaddr_in *addr, char *ip_addr, int port)
     if (ip_addr == NULL)
         addr->sin_addr.s_addr = htonl(INADDR_ANY);
     else
-        addr->sin_addr.s_addr = htonl("ip_addr");
-}
 
+        addr->sin_addr.s_addr = inet_addr(ip_addr);
+}
 
 /**
  * @Author: 王占坤
@@ -110,11 +139,12 @@ void createListen(socketfd skf, int num)
  * @Return: 
  * @Throw: 
  */
-socketfd acceptConnection(socketfd sfk, struct sockaddr* addr, socklen_t len_addr)
+
+socketfd acceptConnection(socketfd sfk, struct sockaddr *addr, socklen_t len_addr)
 {
     //判断是否连接如果可以连接返回新建的
     socketfd cli_skf = accept(sfk, addr, &len_addr);
-    if(cli_skf == -1)
+    if (cli_skf == -1)
     {
         printf("accept socket error: %s(errno: %d)", strerror(errno), errno);
         exit(1);
@@ -125,27 +155,64 @@ socketfd acceptConnection(socketfd sfk, struct sockaddr* addr, socklen_t len_add
 
 /**
  * @Author: 王占坤
+ * @Description: 从buff向skf发送n_bytes个字节的数据
+ * @Param: socketfd skf  目标socket
+ * @Param: char* buff  缓冲区
+ * @Param: size_t n_bytes 要发送的字节数目
+ * @Param: flag 一般默认为0即可
+ * @Return: 
+ * @Throw: 
+ */
+void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
+{
+    if (n_bytes >= BUFSIZ)
+        n_bytes = BUFSIZ - 1;
+    if (n_bytes < 0)
+        n_bytes = 0;
+
+    int num_of_sending_words = send(skf, buff, n_bytes, flag);
+    if (num_of_sending_words == -1) //失败
+    {
+        printf("receive message error: %s(errno: %d)\n", strerror(errno), errno);
+        exit(1);
+    }
+
+    if (num_of_sending_words >= BUFSIZ)
+        num_of_sending_words = BUFSIZ - 1;
+    buff[num_of_sending_words] = 0;
+}
+
+/**
+ * @Author: 王占坤
  * @Description: 从socket接受信息放到buff区，最大字节数为max_size
  * @Param: socketfd skf  信息源socket
  * @Param: char *buff  用于存储的缓冲
- * @Param: size_t max_bytes 最大接受多少字节的信息
+ * @Param: size_t n_bytes 最大接受多少字节的信息
  * @Param: int flag 一般传入为0即可
  * @Return: 
  * @Throw: 
  */
-void receiveMSG(socketfd skf, char *buff, size_t max_bytes, int flag)
+
+void receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
-    int num_of_reading_words = recv(skf, buff, max_bytes, flag);
-    if(num_of_reading_words == -1)//失败
+    memset(buff, 0, BUFSIZ);
+    if (n_bytes > BUFSIZ)
+        n_bytes = BUFSIZ - 1;
+    int num_of_reading_words = recv(skf, buff, n_bytes, flag);
+    printf("num_of_reading_words: %d\n", num_of_reading_words);
+    printf("%s\n", buff);
+    if (num_of_reading_words == -1) //失败
     {
         printf("receive message error: %s(errno: %d)\n", strerror(errno), errno);
         exit(0);
     }
+
+    if (num_of_reading_words >= BUFSIZ)
+        num_of_reading_words = BUFSIZ - 1;
     buff[num_of_reading_words] = 0;
 }
- 
 
- /**
+/**
   * @Author: 王占坤
   * @Description: 向socket回传数据
   * @Param: socketfd skf 目标socket
@@ -154,21 +221,19 @@ void receiveMSG(socketfd skf, char *buff, size_t max_bytes, int flag)
   * @Param: int flag  一般传入0即可
   * @Return: void
   * @Throw: 
-  */ 
- void writeBack(socketfd skf, const void* buff, size_t n_bytes,int flag)
- {
-     if(!fork())
-     {
-         int res = send(skf, buff, n_bytes, flag);
-         if(res == -1)
-         {
-              printf("write back error: %s(errno: %d)", strerror(errno), errno);
-              exit(0);
-         }
-     }
- }
-
-
+  */
+void writeBack(socketfd skf, const void *buff, size_t n_bytes, int flag)
+{
+    if (!fork())
+    {
+        int res = send(skf, buff, n_bytes, flag);
+        if (res == -1)
+        {
+            printf("write back error: %s(errno: %d)", strerror(errno), errno);
+            exit(0);
+        }
+    }
+}
 
 #ifdef TEST
 
@@ -182,25 +247,29 @@ int main(int argc, char *argv[])
     socketfd server_socket, client_socket;
 
     server_socket = createSocket(SOCK_STREAM, 0);
-    /*
-    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == -1)
+    int reuse = 1;
+    if (setsockopt(server_socket, SOL_SOCKET, SO_REUSEADDR, &reuse, sizeof(reuse)) < 0)
     {
-        printf("create socket error: %s(errno: %d)\n", strerror(errno), errno);
-        exit(0);
+        perror("setsockopet error \n");
+        return -1;
     }
-//*/
+
     bindSocketAddr(server_socket, (struct sockaddr *)&addr, sizeof(addr));
 
     // printf("%d\n", listen(server_socket, 5));
     createListen(server_socket, 5);
 
-    client_socket = acceptConnection(server_socket, (struct sockaddr*)NULL, 0);
+
+    client_socket = acceptConnection(server_socket, (struct sockaddr *)NULL, 0);
     // acceptConnection(&client_socket, &server_socket, (struct sockaddr*)NULL, NULL);
 
     receiveMSG(client_socket, buff, 100, 0);
+    printf("%s\n", buff);
 
-    printf("%s\n",buff);
-    writeBack(client_socket, buff, sizeof(buff), 0);
+    // sendMSG(client_socket, buff, 100, 0);
+
+    printf("%s\n", buff);
+    // writeBack(client_socket, buff, sizeof(buff), 0);
 
     close(client_socket);
 

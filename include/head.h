@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 15:08:30 +0800
- * @LastEditTime: 2019-08-30 15:25:38 +0800
+ * @LastEditTime: 2019-08-31 20:22:30 +0800
  * @LastEditors: 
  * @Description: 这里是主头文件，包含了所有的库文件，全局变量声明，结构体声明等
  */
@@ -21,7 +21,9 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <unistd.h>
-#include <string.h>
+#include<string.h>  
+#include<errno.h>  
+#include<sys/types.h>   
 
 
 /////////////define区////////////////////
