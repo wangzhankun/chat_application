@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-01 08:37:10 -0700
+ * @LastEditTime: 2019-09-01 19:28:56 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -17,7 +17,7 @@
  * @Param: 
  * @Return: 
  */
- void insert_sticker(GtkWidget *widget,GdkEventButton *event, Emoji *sinfo)
+ void InsertEmoji(GtkWidget *widget,GdkEventButton *event, Emoji *sinfo)
  {
     
     char head[30]="./bin/sticker";
@@ -51,7 +51,7 @@
  * @Param: 
  * @Return: 
  */
-void destory_sticker_window(GtkWidget *widget,GdkEventCrossing *event,GtkWidget* data){
+void DestoryStickerWindow(GtkWidget *widget,GdkEventCrossing *event,GtkWidget* data){
     gtk_widget_destroy(data);
 }
 
@@ -77,7 +77,7 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, TextView *viewinfo){
             gtk_window_set_position(GTK_WINDOW(sticker_window), GTK_WIN_POS_MOUSE);  //出现在鼠标位置
 
             eventbox = gtk_event_box_new();
-            g_signal_connect(G_OBJECT(eventbox),"leave_notify_event",G_CALLBACK(destory_sticker_window),sticker_window);
+            g_signal_connect(G_OBJECT(eventbox),"leave_notify_event",G_CALLBACK(DestoryStickerWindow),sticker_window);
             gtk_container_add(GTK_CONTAINER(sticker_window),eventbox);
             table = gtk_table_new(2,3,FALSE);
             gtk_container_add(GTK_CONTAINER(eventbox),table);
@@ -134,12 +134,12 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, TextView *viewinfo){
             spointer[4] = sinfo5;
             spointer[5] = sinfo6;
 
-            g_signal_connect(G_OBJECT(sbox1),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo1);
-            g_signal_connect(G_OBJECT(sbox2),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo2);
-            g_signal_connect(G_OBJECT(sbox3),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo3);
-            g_signal_connect(G_OBJECT(sbox4),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo4);
-            g_signal_connect(G_OBJECT(sbox5),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo5);
-            g_signal_connect(G_OBJECT(sbox6),"button_press_event",G_CALLBACK(insert_sticker),(gpointer)sinfo6);
+            g_signal_connect(G_OBJECT(sbox1),"button_press_event",G_CALLBACK(InsertEmoji),(gpointer)sinfo1);
+            g_signal_connect(G_OBJECT(sbox2),"button_press_event",G_CALLBACK(InsertEmoji),(gpointer)sinfo2);
+            g_signal_connect(G_OBJECT(sbox3),"button_press_event",G_CALLBACK(InsertEmoji),(gpointer)sinfo3);
+            g_signal_connect(G_OBJECT(sbox4),"button_press_event",G_CALLBACK(InsertEmoji),(gpointer)sinfo4);
+            g_signal_connect(G_OBJECT(sbox5),"button_press_event",G_CALLBACK(InsertEmoji),(gpointer)sinfo5);
+            g_signal_connect(G_OBJECT(sbox6),"button_press_event",G_CALLBACK(InsertEmoji),(gpointer)sinfo6);
 
             s1 = gtk_image_new_from_file("./bin/sticker/am.gif");
             s2 = gtk_image_new_from_file("./bin/sticker/dk.gif");
@@ -175,7 +175,7 @@ static GtkWidget* dialog = NULL;
  * @Param: 
  * @Return: 
  */
-void on_cancel (GtkButton *button,gpointer data)
+void CancelSelectDocument (GtkButton *button,gpointer data)
 {
     gtk_widget_destroy(dialog);
 }
@@ -186,7 +186,7 @@ void on_cancel (GtkButton *button,gpointer data)
  * @Param: 
  * @Return: 
  */
-void on_ok (GtkButton* button, gpointer data)
+void ChosenDocument (GtkButton* button, gpointer data)
 {
     //filename是文件路径
     const char* filename;
@@ -211,7 +211,7 @@ gboolean on_window_delete_event (GtkWidget* widget,GdkEvent *event,gpointer data
  * @Param: 
  * @Return: 
  */
-void on_file_open_activate (GtkMenuItem* menuitem,gpointer data)
+void OpenSelectDocument (GtkMenuItem* menuitem,gpointer data)
 {
     //函数创建文件选择的窗口
     g_printf(" njzznjnk");
@@ -219,13 +219,13 @@ void on_file_open_activate (GtkMenuItem* menuitem,gpointer data)
     g_signal_connect(G_OBJECT(dialog),"destroy",
                 G_CALLBACK(gtk_widget_destroy),dialog);
     g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(dialog)->ok_button),
-                                        "clicked", G_CALLBACK(on_ok),dialog);
+                                        "clicked", G_CALLBACK(ChosenDocument),dialog);
     g_signal_connect_swapped(G_OBJECT(
                     GTK_FILE_SELECTION(dialog)->ok_button),
-                    "clicked",G_CALLBACK(on_cancel),NULL);
+                    "clicked",G_CALLBACK(CancelSelectDocument),NULL);
     g_signal_connect(G_OBJECT(
                     GTK_FILE_SELECTION(dialog)->cancel_button),
-                    "clicked", G_CALLBACK(on_cancel),NULL);
+                    "clicked", G_CALLBACK(CancelSelectDocument),NULL);
     gtk_widget_show(dialog);
     
 }

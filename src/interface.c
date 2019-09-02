@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-01 06:22:28 -0700
+ * @LastEditTime: 2019-09-01 20:06:11 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,57 +13,82 @@
 #include "interface.h"
 static GtkWidget* dialog = NULL;
 TextView SendText;
-GtkWidget* create_toolbar (GtkWidget* window);
-static gboolean on_drag_drop();
-static void on_drag_data_received(GtkWidget *widget, GdkDragContext *context,
+GtkWidget* CreateSendToolbar (GtkWidget* window);
+static gboolean DropDocument();
+static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
         gint x,gint y,GtkSelectionData *data,guint info,guint time,gpointer user_data);
 
+
+/**
+ * @Author: 王可欣
+ * @Description: 好友列表
+ * @Param: 
+ * @Return: 
+ */
+// GtkWidget* CreateFriendWindow(void)
+// {
+//     GtkWidget* FriendWindow;
+//     gtk_window_set_title(GTK_WINDOW(FriesdWindow),"好友");
+
+//     gtk_window_set_default_size(GTK_WINDOW(TalkWindow),100,300);
+//     accel_group = gtk_accel_group_new();
+//     gtk_window_add_accel_group(GTK_WINDOW(TalkWindow),accel_group);
+//     TalkMenuBox = gtk_vbox_new(FALSE,0);
+//     gtk_container_add (GTK_CONTAINER (TalkWindow), TalkMenuBox);
+
+//     gtk_widget_show_all(FriendWindow);
+//     return FriendWindow;
+// }
 /**
  * @Author: 王可欣
  * @Description: 创建主窗口
  * @Param: 
  * @Return: 
  */
-GtkWidget* create_window(void)
+GtkWidget* CreateTalkWindow(void)
 {
- 
-    GtkWidget* window;
+    GtkWidget* TalkWindow;
     GtkWidget* scrolledwin;
-    GtkWidget* box;
+    GtkWidget* TalkMenuBox;
     GtkWidget* statusbar;
     GtkWidget* menubar ;
     GtkWidget* toolbar ;
+    GtkWidget* SendBtn;
     GtkAccelGroup* accel_group ;
-    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(window),"完整的应用程序窗口");
+    TalkWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(TalkWindow),"完整的应用程序窗口");
 
-    gtk_window_set_default_size(GTK_WINDOW(window),400,300);
+    gtk_window_set_default_size(GTK_WINDOW(TalkWindow),400,300);
     accel_group = gtk_accel_group_new();
-    gtk_window_add_accel_group(GTK_WINDOW(window),accel_group);
-    box = gtk_vbox_new(FALSE,0);
-    gtk_container_add (GTK_CONTAINER (window), box);
+    gtk_window_add_accel_group(GTK_WINDOW(TalkWindow),accel_group);
+    TalkMenuBox = gtk_vbox_new(FALSE,0);
+    gtk_container_add (GTK_CONTAINER (TalkWindow), TalkMenuBox);
     
 
-    toolbar = create_toolbar(window);
-    gtk_box_pack_start(GTK_BOX(box),toolbar,0,1,0);
+    toolbar = CreateSendToolbar(TalkWindow);
+    gtk_box_pack_start(GTK_BOX(TalkMenuBox),toolbar,0,1,0);
     scrolledwin = gtk_scrolled_window_new(NULL,NULL);
     
     SendText.view = gtk_text_view_new();
     SendText.view_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(SendText.view));
-    gtk_box_pack_start(GTK_BOX(box),scrolledwin,TRUE,TRUE,0);
+    gtk_box_pack_start(GTK_BOX(TalkMenuBox),scrolledwin,TRUE,TRUE,0);
     gtk_container_add(GTK_CONTAINER(scrolledwin),SendText.view);
     gtk_text_view_set_editable(GTK_TEXT_VIEW(SendText.view),TRUE);
+
+    SendBtn = gtk_button_new_with_label("发送");
+    gtk_box_pack_start(GTK_BOX(TalkMenuBox),SendBtn,FALSE,FALSE,0);
+    gtk_widget_set_size_request(GTK_BOX(SendBtn),30,30);
 
     // //拖拽
     GtkTargetEntry targets={"text/uri-list", GTK_TARGET_OTHER_APP,1 };    
     gtk_drag_dest_set(SendText.view, GTK_DEST_DEFAULT_DROP, &targets,1, GDK_ACTION_COPY);   
-    g_signal_connect(G_OBJECT(SendText.view),"drag-data-received",G_CALLBACK(on_drag_data_received),NULL);    
-    g_signal_connect(G_OBJECT(SendText.view),"drag-drop",G_CALLBACK(on_drag_drop),NULL);
+    g_signal_connect(G_OBJECT(SendText.view),"drag-data-received",G_CALLBACK(ReceiveDrop),NULL);    
+    g_signal_connect(G_OBJECT(SendText.view),"drag-drop",G_CALLBACK(DropDocument),NULL);
 
     statusbar = gtk_statusbar_new();
-    gtk_box_pack_start(GTK_BOX(box),statusbar,FALSE,FALSE,0);
-    gtk_widget_show_all(window);
-    return window;
+    gtk_box_pack_start(GTK_BOX(TalkMenuBox),statusbar,FALSE,FALSE,0);
+    gtk_widget_show_all(TalkWindow);
+    return TalkWindow;
 }
 
 /**
@@ -72,7 +97,7 @@ GtkWidget* create_window(void)
  * @Param: 
  * @Return: 
  */
-GtkWidget* create_toolbar (GtkWidget* window)
+GtkWidget* CreateSendToolbar (GtkWidget* window)
 {
     
     GtkWidget* toolbar;
@@ -88,7 +113,7 @@ GtkWidget* create_toolbar (GtkWidget* window)
     sticker=gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), "", "发送表情", "Private", StickerIcon, 
                                                         GTK_SIGNAL_FUNC (PressStickerBtn), &SendText);
     OpenDocu=gtk_toolbar_append_item (GTK_TOOLBAR (toolbar), "", "打开文件", "Private", DocuIcon, 
-                                                        GTK_SIGNAL_FUNC (on_file_open_activate), NULL);                               
+                                                        GTK_SIGNAL_FUNC (OpenSelectDocument), NULL);                               
     return toolbar;
 }
 
@@ -99,7 +124,7 @@ GtkWidget* create_toolbar (GtkWidget* window)
  * @Param: 
  * @Return: 
  */
-static gboolean on_drag_drop()
+static gboolean DropDocument()
 {    
     return TRUE;
 }
@@ -110,7 +135,7 @@ static gboolean on_drag_drop()
  * @Param: 
  * @Return: 
  */
-static void on_drag_data_received(GtkWidget *widget, GdkDragContext *context,
+static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
         gint x,gint y,GtkSelectionData *data,guint info,guint time,gpointer user_data)
 {    
     GdkAtom atom=gtk_selection_data_get_data_type(data);    

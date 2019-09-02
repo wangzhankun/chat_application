@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 05:28:33 -0700
- * @LastEditTime: 2019-09-01 07:31:41 -0700
+ * @LastEditTime: 2019-09-01 20:08:18 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -15,12 +15,15 @@
 #include "interface.h"
 int main (int argc , gchar* argv[])
 {
-    GtkWidget * window ;
+    GtkWidget * TalkWindow ;
+    GtkWidget * FriendWindow;
     gtk_init(&argc,&argv);
-    window = create_window();
-    g_signal_connect(G_OBJECT(window),"delete_event",
+    //FriendWindow=CreateFriendWindow();
+    TalkWindow = CreateTalkWindow();
+
+    g_signal_connect(G_OBJECT(TalkWindow),"delete_event",
     G_CALLBACK(on_window_delete_event),NULL);
-    gtk_widget_show(window);
+    gtk_widget_show(TalkWindow);
     gtk_main();
     return FALSE;
 }

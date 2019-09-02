@@ -4,13 +4,16 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-01 05:54:36 -0700
+ * @LastEditTime: 2019-09-01 19:12:12 -0700
  * @LastEditors: 
  * @Description: 
  */
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
-GtkWidget* create_window( void );
+
+GtkWidget* CreateFriendWindow( void );
+GtkWidget* CreateTalkWindow( void );
+
 typedef struct sticker_info{
     GtkWidget *sticker_window;
     GtkTextBuffer *view_buffer; //文本缓冲区
