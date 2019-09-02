@@ -1,10 +1,12 @@
 /*
- * @Descripttion: 
- * @version: 
- * @Author: sueRimn
- * @Date: 2019-08-29 23:38:17
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2019-09-02 03:29:09 -0700
+ * @Copyright: CS of BIT
+ * @Author: hhz
+ * @File name: 
+ * @Version: 
+ * @Date: 2019-09-02 03:42:58 -0700
+ * @LastEditTime: 2019-09-02 03:43:08 -0700
+ * @LastEditors: 
+ * @Description: 
  */
 #include "head.h"
 #include "GTKCreateLoading.h"
