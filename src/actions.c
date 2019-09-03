@@ -4,13 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-02 14:33:42 +0800
+ * @LastEditTime: 2019-09-03 13:12:12 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "actions.h"
-// #define PORT 8888
+#define SERVER_PORT 8888
+#define SERVER_ADDR "0.0.0.0"
 // #define TEST
 // // #define UDP
 // #define TCP
@@ -24,6 +25,48 @@
 // #define SOCKET_TYPE SOCK_STREAM
 // #endif
 
+
+//////////////////不允许外部调用的函数//////////////
+
+/**
+ * @Author: 王占坤
+ * @Description: 不允许外部调用
+ * @Param: 
+ * @Return: 
+ * @Throw: 
+ */
+void reUse(socketfd skf)
+{
+    INT16 optval = 1;
+    int res = setsockopt(skf, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+    if(res == -1)
+    {
+        perror("setsockopt");
+    }
+}
+
+
+
+
+
+///////////////允许外部调用的函数////////////////////
+
+
+int sendDataToServer(char *data)
+{
+    socketfd skf = createSocket(SOCK_STREAM, 0);
+    struct sockaddr_in ser_addr;
+    initialzeSocketaddr(&ser_addr, SERVER_ADDR, SERVER_PORT);
+    createConnection(skf, (struct sockaddr*)&ser_addr, sizeof(ser_addr));
+    sendMSG(skf, data, strlen(data), 0);
+    // printf("%s\n",data);
+    // printf("%d\n",strlen(data));
+    close(skf);
+}
+
+
+
+
 /**
  * @Author: 王占坤
  * @Description: 在skf上创建一个到serv_addr的连接
@@ -33,21 +76,20 @@
  * @Return: 
  * @Throw: 
  */
-void createConnection(socketfd skf, struct sockaddr* serv_addr, size_t addr_len)
+void createConnection(socketfd skf, struct sockaddr *serv_addr, size_t addr_len)
 {
-    if(serv_addr == NULL)
+    if (serv_addr == NULL)
     {
         printf("地址不存在！\n");
     }
-    int res = connect(skf, serv_addr, &addr_len);
-    if(res == -1)
+    int res = connect(skf, serv_addr, addr_len);
+    if (res == -1)
     {
         perror("connect");
         printf("create connection error: %s(errno: %d)\n", strerror(errno), errno);
         exit(1);
     }
 }
-
 
 /**
  * @Author: 王占坤
@@ -67,7 +109,10 @@ socketfd createSocket(int type, int protocol)
         exit(1);
     }
     else
+    {
+        reUse(skf);
         return skf;
+    }
 }
 
 /**
@@ -153,10 +198,10 @@ socketfd acceptConnection(socketfd sfk, struct sockaddr *addr, socklen_t len_add
  * @Param: char* buff  缓冲区
  * @Param: size_t n_bytes 要发送的字节数目
  * @Param: flag 一般默认为0即可
- * @Return: 
+ * @Return: int 0:成功
  * @Throw: 
  */
-void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
+int sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
     if (n_bytes >= BUFSIZ)
         n_bytes = BUFSIZ - 1;
@@ -173,6 +218,7 @@ void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
     if (num_of_sending_words >= BUFSIZ)
         num_of_sending_words = BUFSIZ - 1;
     buff[num_of_sending_words] = 0;
+    return 0;
 }
 
 /**
@@ -182,10 +228,10 @@ void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
  * @Param: char *buff  用于存储的缓冲
  * @Param: size_t n_bytes 最大接受多少字节的信息
  * @Param: int flag 一般传入为0即可
- * @Return: 
+ * @Return: int 0:成功
  * @Throw: 
  */
-void receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
+int receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
     memset(buff, 0, BUFSIZ);
     if (n_bytes > BUFSIZ)
@@ -201,6 +247,7 @@ void receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
     if (num_of_reading_words >= BUFSIZ)
         num_of_reading_words = BUFSIZ - 1;
     buff[num_of_reading_words] = 0;
+    return 0;
 }
 
 /**
@@ -231,8 +278,7 @@ void writeBack(socketfd skf, const void *buff, size_t n_bytes, int flag)
 int main(int argc, char *argv[])
 {
 
-    connect(int fd, (struct sockaddr*)& addr, socklen_t len_addr);
-
+    connect(int fd, (struct sockaddr *)&addr, socklen_t len_addr);
 
     char buff[1024];
     struct sockaddr_in addr;
