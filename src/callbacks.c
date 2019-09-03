@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-03 00:13:55 -0700
+ * @LastEditTime: 2019-09-03 01:06:48 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -236,8 +236,7 @@ void BackToLoading (GtkMenuItem* menuitem, gpointer data)
 {
     
     gtk_widget_hide_all(FriendWindow);
-    GtkWidget *LoadingWindow;
-    LoadingWindow = CreateLoading();
+    LoadingWindow=CreateLoading();
     gtk_widget_show(LoadingWindow); 
    
 }

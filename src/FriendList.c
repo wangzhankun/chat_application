@@ -4,11 +4,12 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-02 03:31:32 -0700
- * @LastEditTime: 2019-09-02 20:29:59 -0700
+ * @LastEditTime: 2019-09-03 01:06:57 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
+#include "interface.h"
 const gchar *list_item_data_key = "list_item_data";
 //static int i = 1;
 GtkWidget *list;
@@ -73,9 +74,12 @@ void sigh_print_selection(GtkWidget *gtklist, gpointer func_data)
     g_print("The selection is a ");
     while (dlist)
     {
+        GtkWidget *TalkWindow;
         const gchar *item_data_string;
         item_data_string = g_object_get_data(G_OBJECT(dlist->data), list_item_data_key);
         g_print("%s ", item_data_string);
+        TalkWindow=CreateTalkWindow(item_data_string);
+        gtk_widget_show(TalkWindow);
         dlist = dlist->next;
     }
     g_print("\n");

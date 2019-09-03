@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-03 00:18:22 -0700
+ * @LastEditTime: 2019-09-03 01:06:56 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -30,14 +30,14 @@ void ClickedLoading(GtkWidget *button, gpointer data)
             break;
         if (*(username + i) > '9' || *(username + i) < '0')
         {
-            char *message="账号含有非字符部分.";
+            char *message = "账号含有非字符部分.";
             flag = 1;
             GtkWidget *dialog;
             dialog = gtk_message_dialog_new(NULL,
                                             GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
                                             GTK_BUTTONS_OK,
                                             message);
-            
+
             gtk_window_set_title(GTK_WINDOW(dialog), "提示");
             gtk_dialog_run(GTK_DIALOG(dialog));
             gtk_widget_destroy(dialog);
@@ -46,8 +46,8 @@ void ClickedLoading(GtkWidget *button, gpointer data)
     }
     if (flag == 0)
     {
-        FriendWindow = CreateMainWindow();
         gtk_widget_hide_all(LoadingWindow);
+        FriendWindow = CreateMainWindow();
         g_print("用户名是:%s ", username);
         g_print("\n");
         g_print("密码是:%s ", password);

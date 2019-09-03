@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-02 20:56:33 -0700
+ * @LastEditTime: 2019-09-03 01:06:52 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -67,7 +67,7 @@ typedef struct text_view_info{
 ///////////////////////////函数声明区////////////////////////////////
 void on_send(GtkButton * button,FromToWin* ftw);
 GtkWidget* CreateMainWindow( void );
-GtkWidget* CreateTalkWindow( void );
+GtkWidget* CreateTalkWindow( char * name );
 GtkWidget* CreateLoading(void);
 GtkWidget* CreateFriendlist(void);
 

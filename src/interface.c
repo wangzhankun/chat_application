@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 00:20:50 -0700
+ * @LastEditTime: 2019-09-03 01:07:00 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -103,7 +103,7 @@ GtkWidget *CreateMainWindow(void)
  * @Param: 
  * @Return: 
  */
-GtkWidget *CreateTalkWindow(void)
+GtkWidget *CreateTalkWindow(char * name)
 {
     GtkWidget *TalkWindow;
     GtkWidget *scrolledwinup, *scrolledwindown;
@@ -115,7 +115,7 @@ GtkWidget *CreateTalkWindow(void)
     TextView mylabelcard, oppolabelcard;
 
     TalkWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_title(GTK_WINDOW(TalkWindow), "完整的应用程序窗口");
+    gtk_window_set_title(GTK_WINDOW(TalkWindow), name);
     gtk_window_set_default_size(GTK_WINDOW(TalkWindow), 800, 500);
     gtk_window_set_position(GTK_WINDOW(TalkWindow), GTK_WIN_POS_CENTER);
     gtk_container_set_border_width(GTK_CONTAINER(TalkWindow), 10);
