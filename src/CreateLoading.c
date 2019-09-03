@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-03 01:06:56 -0700
+ * @LastEditTime: 2019-09-03 02:48:48 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,6 +13,52 @@
 static GtkWidget *entry1;
 static GtkWidget *entry2;
 
+
+/**
+ * @Author: 王可欣
+ * @Description: 按回车键(未使用)
+ * @Param: 
+ * @Return: 
+ */
+void PressEnter(GtkWidget *widget, GdkEventKey *event, gpointer data)
+{
+    if (event->keyval == GDK_KEY_Return)
+    {
+        const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry1));
+        const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
+        gint i, flag = 0;
+        for (i = 0; i < 10; i++)
+        {
+            if (*(username + i) == '\0')
+                break;
+            if (*(username + i) > '9' || *(username + i) < '0')
+            {
+                char *message = "账号含有非字符部分.";
+                flag = 1;
+                GtkWidget *dialog;
+                dialog = gtk_message_dialog_new(NULL,
+                                                GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+                                                GTK_BUTTONS_OK,
+                                                message);
+
+                gtk_window_set_title(GTK_WINDOW(dialog), "提示");
+                gtk_dialog_run(GTK_DIALOG(dialog));
+                gtk_widget_destroy(dialog);
+                break;
+            }
+        }
+        if (flag == 0)
+        {
+            gtk_widget_hide_all(LoadingWindow);
+            FriendWindow = CreateMainWindow();
+            g_print("用户名是:%s ", username);
+            g_print("\n");
+            g_print("密码是:%s ", password);
+            g_print("\n");
+        }
+    }
+ 
+}
 /**
  * @Author: 何禾子
  * @Description: 点击登录按钮
@@ -135,6 +181,7 @@ GtkWidget *CreateLoading(void)
     button = gtk_button_new_with_label("登录");
     g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(ClickedLoading), NULL);
 
+    //g_signal_connect(G_OBJECT(window), "key_press_event",G_CALLBACK(PressEnter), NULL);
     gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
     gtk_widget_set_size_request(G_OBJECT(button), 50, 50);
     gtk_widget_show_all(window);

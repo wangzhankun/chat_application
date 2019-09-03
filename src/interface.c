@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 01:07:00 -0700
+ * @LastEditTime: 2019-09-03 02:03:58 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -15,6 +15,7 @@
 TextView SendText,SeeText;
 GtkWidget *CreateSendToolbar(GtkWidget *window);
 GtkWidget *CreateMainToolbar(GtkWidget *window);
+GtkWidget *CreateS(GtkWidget *window);
 static gboolean DropDocument();
 static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
                         gint x, gint y, GtkSelectionData *data, guint info, guint time, gpointer user_data);
@@ -48,6 +49,7 @@ GtkWidget *CreateMainWindow(void)
     SelfInfo->ID = "小明";
     SelfInfo->NickName = "ssssss";
     MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_position(GTK_WINDOW(MainWindow), GTK_WIN_POS_CENTER);
 
     gtk_window_set_title(GTK_WINDOW(MainWindow), "好友列表");
     g_signal_connect(G_OBJECT(MainWindow), "destroy",
@@ -58,7 +60,7 @@ GtkWidget *CreateMainWindow(void)
     SelfBox = gtk_hbox_new(FALSE, 0);
     // gtk_widget_set_size_request(GTK_BOX(SelfTextBox),30,20);
 
-    SelfImage = gtk_image_new_from_file("./bin/pic/pic.png");
+    SelfImage = gtk_image_new_from_file("./bin/pic/head.png");
     gtk_container_add(GTK_CONTAINER(SelfBox), SelfImage);
 
     SelfTextBox = gtk_vbox_new(FALSE, 0);
@@ -97,6 +99,7 @@ GtkWidget *CreateMainWindow(void)
     gtk_widget_show_all(MainWindow);
     return MainWindow;
 }
+
 /**
  * @Author: 王可欣，邓方晴
  * @Description: 创建主窗口
@@ -177,6 +180,7 @@ GtkWidget *CreateTalkWindow(char * name)
     gtk_box_pack_start(GTK_BOX(TalkMenuBox), buttonbox, FALSE, FALSE, 0);
     SendBtn = gtk_button_new_with_label("发送");
     g_signal_connect(G_OBJECT(SendBtn), "clicked", G_CALLBACK(on_send), (gpointer)chatwin);
+
     gtk_box_pack_end(buttonbox, SendBtn, FALSE, FALSE, 0);
 
     gtk_container_add(GTK_CONTAINER(TalkWindow), hPaned);
