@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-03 04:06:51 -0700
+ * @LastEditTime: 2019-09-03 06:05:40 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -232,7 +232,6 @@ void OpenSelectDocument(GtkMenuItem *menuitem, gpointer data)
  */
 void BackToLoading(GtkMenuItem *menuitem, gpointer data)
 {
-
     gtk_widget_hide_all(FriendWindow);
     LoadingWindow = CreateLoading();
     gtk_widget_show(LoadingWindow);

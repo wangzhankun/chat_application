@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 02:03:58 -0700
+ * @LastEditTime: 2019-09-03 06:26:32 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -232,15 +232,13 @@ GtkWidget *CreateMainToolbar(GtkWidget *window)
     GtkWidget *toolbar;
     GtkWidget *StickerIcon, *DocuIcon;
     GtkWidget *sticker;
-    GtkToolItem *OpenDocu;
+    GtkToolItem *OpenDocu;   
 
     toolbar = gtk_toolbar_new();
     StickerIcon = gtk_image_new_from_file("./bin/pic/setting.png");
-    DocuIcon = gtk_image_new_from_file("./bin/pic/document.png");
-    gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
     sticker = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "设置", "Private", StickerIcon,
-                                      GTK_SIGNAL_FUNC(BackToLoading), &window);
+                                      GTK_SIGNAL_FUNC(BackToLoading) , NULL);                                  
     return toolbar;
 }
 
@@ -279,3 +277,4 @@ static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
     }
     gtk_drag_finish(context, TRUE, TRUE, time);
 }
+

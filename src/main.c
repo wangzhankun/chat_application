@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 05:28:33 -0700
- * @LastEditTime: 2019-09-03 02:29:12 -0700
+ * @LastEditTime: 2019-09-03 05:44:42 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -12,6 +12,7 @@
 #include "head.h"
 #include "callbacks.h"
 #include "interface.h"
+#include "mainprogram.h"
 
 int main(int argc, gchar *argv[])
 {
@@ -22,95 +23,102 @@ int main(int argc, gchar *argv[])
     g_signal_connect(G_OBJECT(LoadingWindow), "delete_event",
                      G_CALLBACK(on_window_delete_event), NULL);
     gtk_widget_show(LoadingWindow);
+   // g_thread_create((GThreadFunc)recv_thread, NULL, FALSE, NULL); 
     gtk_main();
-
     return FALSE;
 }
-// #include <gtk/gtk.h>
-// #include <gdk/gdkkeysyms.h>
-// #include "ouritem.h"
-// //定义枚举类型，说明信号的名称和次序
-// enum {
-//     OURITEM_OK_SIGNAL,
-//     LAST_SIGNAL
-// };
-// static gint ouritem_signals[LAST_SIGNAL] = { 0 };
-// static void our_item_init(OurItem *ouritem);
-// static void our_item_class_init(OurItemClass *ouritemclass);
-// static void enter_ok(void);
-// void    on_key_release(GtkWidget *entry, GdkEventKey *event, gpointer data);
-// //注册自定义控件
-// GtkType our_item_get_type(void)
+// static gint //弹出菜单回调函数
+// my_popup_handler(GtkWidget *widget, GdkEvent *event)
 // {
-//     static GtkType our_item_type = 0;
-//     if(!our_item_type)
+//     GtkMenu *menu;                //菜单
+//     GdkEventButton *event_button; //要弹出菜单的对象
+//     g_return_val_if_fail(widget != NULL, FALSE);
+//     g_return_val_if_fail(GTK_IS_MENU(widget), FALSE);
+//     g_return_val_if_fail(event != NULL, FALSE);
+//     menu = GTK_MENU(widget); //转换为菜单
+//     if (event->type == GDK_BUTTON_PRESS)
+//     //是此事件
 //     {
-//         GtkTypeInfo our_item_info = {
-//             "OurItem",  //控件名
-//             sizeof(OurItem),    //控件实例的尺寸
-//             sizeof(OurItemClass),   //控件类的尺寸
-//             (GtkClassInitFunc)our_item_class_init,  //控件类初始化函数
-//             our_item_init,    //控件实例初始化函数
-//             NULL, //
-//             NULL //
-//         };
-//         our_item_type = gtk_type_unique(GTK_TYPE_HBOX, &our_item_info);//注册此控件
+//         event_button = (GdkEventButton *)event;
+//         if (event_button->button == 3) //判断是否为右/三键
+//         {                              //执行操作
+//             gtk_menu_popup(menu, NULL, NULL, NULL, NULL,
+//                            event_button->button, event_button->time);
+//             return TRUE;
+//         }
 //     }
-//     return our_item_type;
+//     return FALSE;
 // }
-// //初始化实例结构
-// static void our_item_init(OurItem *ouritem)
+// int main(int argc, char *argv[])
 // {
-//     ouritem->label = gtk_label_new(NULL);
-//     gtk_box_pack_start(GTK_BOX(ouritem),ouritem->label,FALSE,FALSE,2);
-//     ouritem->entry = gtk_entry_new();
-//     g_signal_connect(G_OBJECT(ouritem->entry),"key_release_event",
-//             G_CALLBACK(on_key_release),ouritem);
-//     gtk_box_pack_start(GTK_BOX(ouritem),ouritem->entry,TRUE,TRUE,2);
-// }
-// //初始化类结构
-// static void our_item_class_init(OurItemClass *ouritemclass)
-// {
-//     GtkObjectClass *object_class;
-//     object_class = (GtkObjectClass*)ouritemclass;
-//     //下面函数创建一个新的信号
-//     ouritem_signals[OURITEM_OK_SIGNAL] = g_signal_new("ouritem_ok",
-//                     G_TYPE_FROM_CLASS(object_class),
-//                     G_SIGNAL_RUN_FIRST,
-//                     G_STRUCT_OFFSET(OurItemClass, enter_ok),
-//                     NULL,NULL,
-//                     g_cclosure_marshal_VOID__VOID,
-//                     G_TYPE_NONE, 0, NULL);
-//     ouritemclass->enter_ok = enter_ok;//此函数在下面定义
-// }
-// //创建新的自定义控件
-// GtkWidget* our_item_new(void)
-// {
-//     return GTK_WIDGET(g_object_new(TYPE_OUR_ITEM,0));
-// }
-// //设定自定义控件前面的静态文本
-// void our_item_set_label(GtkWidget* item, gchar* label)
-// {
-//     gtk_label_set_text(GTK_LABEL(OUR_ITEM(item)->label),label);
-// }
-// //带参数创建自定义控件
-// GtkWidget* our_item_new_with_label(gchar* label)
-// {
-//     GtkWidget* item;
-//     item = our_item_new();
-//     our_item_set_label(item,label);
-//     return item;
-// }
-// //此函数只是简单的在终端上提示你已经按了一次回车键
-// static void enter_ok(void)
-// {
-//     g_print("OK! Enter key was clicked! \n");
-// }
-// //以下函数捕获键盘输入消息
-// void    on_key_release(GtkWidget *entry, GdkEventKey *event, gpointer data)
-// {
-//     if(event->keyval == GDK_KEY_Return)  //当按下回车键后发射自定义的信号
-//     {
-//         g_signal_emit(G_OBJECT(data),ouritem_signals[OURITEM_OK_SIGNAL],0);
-//     }
+//     GtkWidget *window;
+//     GtkWidget *box;
+//     GtkWidget *button;
+//     GtkWidget *menubar;
+//     GtkWidget *menu;
+//     GtkWidget *editmenu;
+//     GtkWidget *helpmenu;
+//     GtkWidget *rootmenu;
+//     GtkWidget *menuitem;
+//     GtkAccelGroup *accel_group;
+//     gtk_init(&argc, &argv);
+//     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+//     gtk_window_set_title(GTK_WINDOW(window), "弹出式菜单");
+//     g_signal_connect(G_OBJECT(window), "destroy",
+//                      G_CALLBACK(gtk_main_quit), NULL);
+
+//     accel_group = gtk_accel_group_new();
+//     gtk_window_add_accel_group(GTK_WINDOW(window), accel_group);
+
+//     box = gtk_vbox_new(FALSE, 0);
+//     gtk_container_add(GTK_CONTAINER(window), box);
+//     menu = gtk_menu_new(); //文件菜单
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_NEW, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_OPEN, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_SAVE_AS, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+//     gtk_widget_show(menuitem);
+//     menuitem = gtk_separator_menu_item_new();
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_QUIT, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menu), menuitem);
+//     rootmenu = gtk_menu_item_new_with_label(" 文件 ");
+//     gtk_menu_item_set_submenu(GTK_MENU_ITEM(rootmenu), menu);
+//     menubar = gtk_menu_bar_new();
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menubar), rootmenu);
+//     rootmenu = gtk_menu_item_new_with_label(" 编辑 ");
+//     editmenu = gtk_menu_new(); //编辑菜单
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_CUT, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(editmenu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_COPY, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(editmenu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_PASTE, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(editmenu), menuitem);
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_FIND, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(editmenu), menuitem);
+//     gtk_widget_show(rootmenu);
+//     gtk_menu_item_set_submenu(GTK_MENU_ITEM(rootmenu), editmenu);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menubar), rootmenu);
+//     rootmenu = gtk_menu_item_new_with_label(" 帮助 ");
+//     helpmenu = gtk_menu_new();
+//     menuitem = gtk_image_menu_item_new_from_stock(GTK_STOCK_HELP, accel_group);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(helpmenu), menuitem);
+//     menuitem = gtk_menu_item_new_with_label(" 关于... ");
+//     gtk_menu_shell_append(GTK_MENU_SHELL(helpmenu), menuitem);
+//     gtk_menu_item_set_submenu(GTK_MENU_ITEM(rootmenu), helpmenu);
+//     gtk_menu_shell_append(GTK_MENU_SHELL(menubar), rootmenu);
+//     gtk_box_pack_start(GTK_BOX(box), menubar, FALSE, FALSE, 5);
+//     //关键---弹出式菜单设计
+//     button = gtk_button_new_with_label("单击右键弹出菜单");
+//     g_signal_connect_swapped(GTK_OBJECT(button),
+//                              "button_press_event",
+//                              G_CALLBACK(my_popup_handler), GTK_OBJECT(menu));
+//     gtk_box_pack_start(GTK_BOX(box), button, FALSE, FALSE, 5);
+//     gtk_widget_show_all(window);
+//     gtk_main();
+//     return FALSE;
 // }
