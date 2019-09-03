@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-02 03:38:32 -0700
+ * @LastEditTime: 2019-09-02 09:52:09 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -39,8 +39,9 @@ GtkWidget *CreateFriendWindow(void)
     GtkWidget *PaneBetweenSelfAndFriend;
     GtkWidget *panel;
     GtkWidget *MainToolbar;
-    GtkWidget *MainMenuBox;
-    GtkWidget *MainBox;
+    GtkWidget *MainMenuBox; 
+    GtkWidget *MainBox;  //竖版box
+    GtkWidget *align;
 
     Self *SelfInfo = (Self *)malloc(sizeof(Self));
     SelfInfo->ID = "1111111";
@@ -50,19 +51,11 @@ GtkWidget *CreateFriendWindow(void)
     gtk_window_set_title(GTK_WINDOW(MainWindow), "好友列表");
     g_signal_connect(G_OBJECT(MainWindow), "destroy",
                      G_CALLBACK(gtk_main_quit), NULL);
+    gtk_window_set_resizable(GTK_WINDOW(MainWindow), FALSE);
     
-    
-    gtk_window_set_default_size(GTK_WINDOW(MainWindow), 300, 700);
-
+    gtk_window_set_default_size(GTK_WINDOW(MainWindow), 300, 600);
     SelfBox = gtk_hbox_new(FALSE, 0);
-    
-    /**
-     * @Author: 王可欣
-     * @Description: Box大小
-     * @Param: 
-     * @Return: 
-     */
-    gtk_widget_set_size_request(GTK_BOX(SelfTextBox),30,20);
+   // gtk_widget_set_size_request(GTK_BOX(SelfTextBox),30,20);
     
 
     SelfImage = gtk_image_new_from_file("./bin/pic/pic.png");
@@ -77,18 +70,29 @@ GtkWidget *CreateFriendWindow(void)
     NickLable = gtk_label_new(SelfInfo->NickName);
     gtk_container_add(GTK_CONTAINER(SelfTextBox), NickLable);
 
-    MainBox=gtk_vbox_new(FALSE,0);
 
-    MainMenuBox = gtk_vbox_new(FALSE, 0);
-    gtk_container_add(GTK_CONTAINER(MainBox), SelfBox);
-    gtk_container_add(GTK_CONTAINER(MainBox), MainMenuBox);
+    gtk_widget_set_size_request(GTK_BOX(SelfBox), 300, 100);
+    align = gtk_alignment_new(0, 0, 0, 0);
+    gtk_container_add(GTK_CONTAINER(align), SelfBox);
+
+
+    MainBox=gtk_vbox_new(FALSE,0);
+    gtk_container_add(GTK_CONTAINER(MainBox), align);
     
-    gtk_container_add(GTK_CONTAINER(MainWindow), MainBox);
+    //好友列表
+    FriendBox= CreateFriendlist();
+    gtk_widget_set_size_request(GTK_BOX(FriendBox), 300, 520);
+    gtk_container_add(GTK_CONTAINER(MainBox), FriendBox);
+
+    //工具栏
+       
+    MainMenuBox = gtk_vbox_new(FALSE, 0);
+    gtk_container_add(GTK_CONTAINER(MainBox), MainMenuBox);
+
     MainToolbar=CreateMainToolbar(MainWindow);
     gtk_box_pack_start(GTK_BOX(MainMenuBox), MainToolbar, 0, 1, 0);
 
-   
-
+    gtk_container_add(GTK_CONTAINER(MainWindow), MainBox);
     gtk_widget_show_all(MainWindow);
     return MainWindow;
 }
@@ -187,10 +191,8 @@ GtkWidget *CreateMainToolbar(GtkWidget *window)
     gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
     sticker = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "设置", "Private", StickerIcon,
-                                      GTK_SIGNAL_FUNC(BackToLoading), &SendText);
-    OpenDocu = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "打开文件", "Private", DocuIcon,
-                                       GTK_SIGNAL_FUNC(OpenSelectDocument), NULL);
-     return toolbar;
+                                      GTK_SIGNAL_FUNC(BackToLoading), &window);
+    return toolbar;
 }
 
 /**

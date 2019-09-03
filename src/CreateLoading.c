@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-02 03:38:27 -0700
+ * @LastEditTime: 2019-09-02 08:33:51 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -12,9 +12,11 @@
 #include "interface.h"
 static GtkWidget *entry1;
 static GtkWidget *entry2;
+
+
 /**
  * @Author: 何禾子
- * @Description: 点击出发事件
+ * @Description: 点击登录按钮
  * @Param: 
  * @Return: 
  */
@@ -27,6 +29,7 @@ void on_button_clicked(GtkWidget *button, gpointer data)
     g_print("密码是:%s ", password);
     g_print("\n");
 }
+
 /**
  * @Author: 何禾子
  * @Description:创建头像 
@@ -75,7 +78,7 @@ GtkWidget * CreateLoading(void)
     GtkWidget *sep1;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    g_signal_connect(G_OBJECT(window), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+   
     gtk_window_set_title(GTK_WINDOW(window), "登录窗口");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_container_set_border_width(GTK_CONTAINER(window), 0);
@@ -96,10 +99,10 @@ GtkWidget * CreateLoading(void)
     gtk_box_pack_start(GTK_BOX(vbox), box1, FALSE, FALSE, 5);
     box2 = gtk_hbox_new(FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), box2, FALSE, FALSE, 5);
-    //label1 = gtk_label_new("用户名:");
+    
     entry1 = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(box1), entry1, FALSE, FALSE, 5);
-    //label2 = gtk_label_new("密码:");
+
     entry2 = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(entry2), FALSE);
     gtk_box_pack_start(GTK_BOX(box2), entry2, FALSE, FALSE, 5);

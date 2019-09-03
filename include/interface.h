@@ -4,17 +4,24 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-02 03:38:29 -0700
+ * @LastEditTime: 2019-09-02 05:48:01 -0700
  * @LastEditors: 
  * @Description: 
  */
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
 
+
+
 GtkWidget* CreateFriendWindow( void );
 GtkWidget* CreateTalkWindow( void );
-GtkWidget* GTKcreateloading(void);
+GtkWidget* CreateLoading(void);
+GtkWidget* CreateFriendlist(void);
 
+
+enum Page{
+    MAIN=1,TALK=2,LOG=3
+};
 
 typedef struct SelfInfo{
     char *NickName;

@@ -4,13 +4,12 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-02 03:38:25 -0700
+ * @LastEditTime: 2019-09-02 09:52:23 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "interface.h"
-
 /**
  * @Author: 王可欣
  * @Description: 在输入框中插入表情
@@ -192,10 +191,7 @@ void ChosenDocument (GtkButton* button, gpointer data)
     const char* filename;
     GtkWidget* window;
     filename = gtk_file_selection_get_filename(GTK_FILE_SELECTION(data));
-    //g_print("xnjxnjzx");
     g_printf("%s\n",filename);
-    //window = create_view(filename);
-    //gtk_widget_show(window);
 }
 
 
@@ -215,7 +211,7 @@ void OpenSelectDocument (GtkMenuItem* menuitem,gpointer data)
 {
     //函数创建文件选择的窗口
     g_printf(" njzznjnk");
-     dialog = gtk_file_selection_new("请选择一个图像文件");
+    dialog = gtk_file_selection_new("请选择一个图像文件");
     g_signal_connect(G_OBJECT(dialog),"destroy",
                 G_CALLBACK(gtk_widget_destroy),dialog);
     g_signal_connect(G_OBJECT(GTK_FILE_SELECTION(dialog)->ok_button),
@@ -240,7 +236,7 @@ void BackToLoading (GtkMenuItem* menuitem, gpointer data)
 {
     GtkWidget *LoadingWindow;
     LoadingWindow = CreateLoading();
-    g_signal_connect(G_OBJECT(LoadingWindow), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
     gtk_widget_show(LoadingWindow);
 }
 
