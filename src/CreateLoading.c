@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-03 00:14:00 -0700
+ * @LastEditTime: 2019-09-03 00:18:22 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -19,7 +19,7 @@ static GtkWidget *entry2;
  * @Param: data可以传错误类型
  * @Return: 
  */
-void on_button_clicked(GtkWidget *button, gpointer data)
+void ClickedLoading(GtkWidget *button, gpointer data)
 {
     const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry1));
     const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
@@ -57,11 +57,11 @@ void on_button_clicked(GtkWidget *button, gpointer data)
 
 /**
  * @Author: 何禾子
- * @Description:创建头像 
+ * @Description:创建登录头像 
  * @Param: 
  * @Return: 
  */
-GtkWidget *create_button1(void)
+GtkWidget *CreateLoadingImage(void)
 {
     GtkWidget *box;
     GtkWidget *image;
@@ -112,7 +112,7 @@ GtkWidget *CreateLoading(void)
     hbox = gtk_hbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(window), hbox);
     //显示头像
-    button1 = create_button1();
+    button1 = CreateLoadingImage();
     gtk_box_pack_start(GTK_BOX(hbox), button1, FALSE, FALSE, 5);
     //分隔线
     sep1 = gtk_vseparator_new();
@@ -133,7 +133,7 @@ GtkWidget *CreateLoading(void)
     gtk_box_pack_start(GTK_BOX(box2), entry2, FALSE, FALSE, 5);
     //登录按钮
     button = gtk_button_new_with_label("登录");
-    g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_button_clicked), NULL);
+    g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(ClickedLoading), NULL);
 
     gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
     gtk_widget_set_size_request(G_OBJECT(button), 50, 50);

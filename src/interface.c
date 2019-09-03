@@ -4,14 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 00:13:57 -0700
+ * @LastEditTime: 2019-09-03 00:20:50 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "callbacks.h"
 #include "interface.h"
-static GtkWidget *dialog = NULL;
+
 TextView SendText,SeeText;
 GtkWidget *CreateSendToolbar(GtkWidget *window);
 GtkWidget *CreateMainToolbar(GtkWidget *window);
