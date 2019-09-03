@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-01 19:51:39 -0700
+ * @LastEditTime: 2019-09-02 20:27:01 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -12,14 +12,38 @@
 #include "GTKCreateLoading.h"
 static GtkWidget *entry1;
 static GtkWidget *entry2;
-void on_button_clicked(GtkWidget *button, gpointer data)
+
+void on_button_clicked(GtkWidget *button, gpointer window)
 {
     const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry1));
     const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
-    g_print("用户名是:%s ", username);
-    g_print("\n");
-    g_print("密码是:%s ", password);
-    g_print("\n");
+    gint i, flag = 0;
+    for (i = 0; i < 10; i++)
+    {
+        if (*(username + i) == '\0')
+            break;
+        if (*(username + i) > '9' || *(username + i) < '0')
+        {
+            flag=1;
+            GtkWidget *dialog;
+            dialog = gtk_message_dialog_new(window,
+                                            GTK_DIALOG_DESTROY_WITH_PARENT,
+                                            GTK_MESSAGE_INFO,
+                                            GTK_BUTTONS_OK,
+                                            "账号含有非字符部分.", "title");
+            gtk_window_set_title(GTK_WINDOW(dialog), "提示");
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+            break;
+        }
+    }
+    if (flag == 0)
+    {
+        g_print("用户名是:%s ", username);
+        g_print("\n");
+        g_print("密码是:%s ", password);
+        g_print("\n");
+    }
 }
 
 GtkWidget *create_button1(void)
@@ -42,8 +66,7 @@ GtkWidget *create_button1(void)
     return align;
 }
 
-
-GtkWidget * CreateLoading(void)
+GtkWidget *CreateLoading(void)
 {
     GtkWidget *window;
     GtkWidget *hbox;
@@ -83,17 +106,20 @@ GtkWidget * CreateLoading(void)
     //label1 = gtk_label_new("用户名:");
     entry1 = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(box1), entry1, FALSE, FALSE, 5);
+    gtk_entry_set_max_length(entry1, 10);
     //label2 = gtk_label_new("密码:");
     entry2 = gtk_entry_new();
     gtk_entry_set_visibility(GTK_ENTRY(entry2), FALSE);
     gtk_box_pack_start(GTK_BOX(box2), entry2, FALSE, FALSE, 5);
+    gtk_entry_set_max_length(entry2, 20);
     //登录按钮
     button = gtk_button_new_with_label("登录");
-    g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_button_clicked), NULL);
-    g_signal_connect_swapped(G_OBJECT(button), "clicked", G_CALLBACK(gtk_widget_destroy), window);
+    g_signal_connect(G_OBJECT(button), "clicked",
+                     G_CALLBACK(on_button_clicked), (gpointer)window);
+    // g_signal_connect_swapped(G_OBJECT(button), "clicked", G_CALLBACK(gtk_widget_destroy), window);
+    gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 10);
+    gtk_widget_set_size_request(G_OBJECT(button), 50, 30);
 
-    gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
-    gtk_widget_set_size_request(G_OBJECT(button), 50, 50);
     gtk_widget_show_all(window);
     return window;
 }
