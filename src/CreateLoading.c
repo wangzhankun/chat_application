@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-02 08:33:51 -0700
+ * @LastEditTime: 2019-09-03 00:14:00 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,21 +13,46 @@
 static GtkWidget *entry1;
 static GtkWidget *entry2;
 
-
 /**
  * @Author: 何禾子
  * @Description: 点击登录按钮
- * @Param: 
+ * @Param: data可以传错误类型
  * @Return: 
  */
 void on_button_clicked(GtkWidget *button, gpointer data)
 {
     const gchar *username = gtk_entry_get_text(GTK_ENTRY(entry1));
     const gchar *password = gtk_entry_get_text(GTK_ENTRY(entry2));
-    g_print("用户名是:%s ", username);
-    g_print("\n");
-    g_print("密码是:%s ", password);
-    g_print("\n");
+    gint i, flag = 0;
+    for (i = 0; i < 10; i++)
+    {
+        if (*(username + i) == '\0')
+            break;
+        if (*(username + i) > '9' || *(username + i) < '0')
+        {
+            char *message="账号含有非字符部分.";
+            flag = 1;
+            GtkWidget *dialog;
+            dialog = gtk_message_dialog_new(NULL,
+                                            GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT, GTK_MESSAGE_INFO,
+                                            GTK_BUTTONS_OK,
+                                            message);
+            
+            gtk_window_set_title(GTK_WINDOW(dialog), "提示");
+            gtk_dialog_run(GTK_DIALOG(dialog));
+            gtk_widget_destroy(dialog);
+            break;
+        }
+    }
+    if (flag == 0)
+    {
+        FriendWindow = CreateMainWindow();
+        gtk_widget_hide_all(LoadingWindow);
+        g_print("用户名是:%s ", username);
+        g_print("\n");
+        g_print("密码是:%s ", password);
+        g_print("\n");
+    }
 }
 
 /**
@@ -43,7 +68,7 @@ GtkWidget *create_button1(void)
     GtkWidget *button;
     GtkWidget *align;
 
-    image = gtk_image_new_from_file("./bin/pic/setting.png");
+    image = gtk_image_new_from_file("./bin/pic/130pixel.png");
     box = gtk_hbox_new(FALSE, 0);
     //gtk_image_set_pixel_size(image,50);
     gtk_container_set_border_width(GTK_CONTAINER(box), 20);
@@ -62,7 +87,7 @@ GtkWidget *create_button1(void)
  * @Param: 
  * @Return: 
  */
-GtkWidget * CreateLoading(void)
+GtkWidget *CreateLoading(void)
 {
     GtkWidget *window;
     GtkWidget *hbox;
@@ -78,7 +103,7 @@ GtkWidget * CreateLoading(void)
     GtkWidget *sep1;
 
     window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-   
+
     gtk_window_set_title(GTK_WINDOW(window), "登录窗口");
     gtk_window_set_position(GTK_WINDOW(window), GTK_WIN_POS_CENTER);
     gtk_container_set_border_width(GTK_CONTAINER(window), 0);
@@ -99,7 +124,7 @@ GtkWidget * CreateLoading(void)
     gtk_box_pack_start(GTK_BOX(vbox), box1, FALSE, FALSE, 5);
     box2 = gtk_hbox_new(FALSE, 0);
     gtk_box_pack_start(GTK_BOX(vbox), box2, FALSE, FALSE, 5);
-    
+
     entry1 = gtk_entry_new();
     gtk_box_pack_start(GTK_BOX(box1), entry1, FALSE, FALSE, 5);
 
@@ -109,7 +134,6 @@ GtkWidget * CreateLoading(void)
     //登录按钮
     button = gtk_button_new_with_label("登录");
     g_signal_connect(G_OBJECT(button), "clicked", G_CALLBACK(on_button_clicked), NULL);
-    g_signal_connect_swapped(G_OBJECT(button), "clicked", G_CALLBACK(gtk_widget_destroy), window);
 
     gtk_box_pack_start(GTK_BOX(vbox), button, FALSE, FALSE, 0);
     gtk_widget_set_size_request(G_OBJECT(button), 50, 50);

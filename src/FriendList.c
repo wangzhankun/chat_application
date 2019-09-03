@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-02 03:31:32 -0700
- * @LastEditTime: 2019-09-02 09:06:57 -0700
+ * @LastEditTime: 2019-09-02 20:29:59 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -34,6 +34,7 @@ GtkWidget * CreateFriendlist(void)
 
     g_printf("aaaa");
     vbox = gtk_vbox_new(FALSE, 0);
+    
    // gtk_container_add(GTK_CONTAINER(window), vbox);
     //滚动条
     scrolled_window = gtk_scrolled_window_new(NULL, NULL);
@@ -41,7 +42,8 @@ GtkWidget * CreateFriendlist(void)
     gtk_scrolled_window_set_policy(scrolled_window, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     
     gtklist = gtk_list_new();
-    
+   // GList=gtklist->priv;
+    //gtk_widget_set_size_request(GTK_LIST(gtklist), 300, 300);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), gtklist);
     g_signal_connect(G_OBJECT(gtklist), "selection_changed", G_CALLBACK(sigh_print_selection), NULL);
 /////////////传入数据

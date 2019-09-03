@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-02 05:48:01 -0700
+ * @LastEditTime: 2019-09-02 20:56:33 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,15 +13,21 @@
 
 
 
-GtkWidget* CreateFriendWindow( void );
-GtkWidget* CreateTalkWindow( void );
-GtkWidget* CreateLoading(void);
-GtkWidget* CreateFriendlist(void);
+///////////////////////////结构体定义区///////////////////////
 
 
-enum Page{
-    MAIN=1,TALK=2,LOG=3
-};
+typedef struct from_to_windows{
+    GtkTextBuffer *from;
+    GtkTextBuffer *to;
+}FromToWin;
+
+typedef struct _WinAppear
+{
+    gchar* title;
+    gint width,height;
+    GtkWindowPosition position;
+}WINAPPEAR;
+
 
 typedef struct SelfInfo{
     char *NickName;
@@ -55,5 +61,14 @@ typedef struct text_view_info{
     GtkWidget *view;
     GtkTextBuffer *view_buffer;
 }TextView;
+
+
+
+///////////////////////////函数声明区////////////////////////////////
+void on_send(GtkButton * button,FromToWin* ftw);
+GtkWidget* CreateMainWindow( void );
+GtkWidget* CreateTalkWindow( void );
+GtkWidget* CreateLoading(void);
+GtkWidget* CreateFriendlist(void);
 
 #endif

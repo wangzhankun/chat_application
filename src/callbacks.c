@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-02 09:52:23 -0700
+ * @LastEditTime: 2019-09-03 00:13:55 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -234,9 +234,70 @@ void OpenSelectDocument (GtkMenuItem* menuitem,gpointer data)
  */
 void BackToLoading (GtkMenuItem* menuitem, gpointer data)
 {
+    
+    gtk_widget_hide_all(FriendWindow);
     GtkWidget *LoadingWindow;
     LoadingWindow = CreateLoading();
-
-    gtk_widget_show(LoadingWindow);
+    gtk_widget_show(LoadingWindow); 
+   
 }
 
+/**
+ * @Author: 邓方晴
+ * @Description: 发送按钮点击事件：将文本编辑框中的信息传给显示区，编辑框清空，显示区显示内容,目前只能传送文本
+ * @Param: 结构体，包括编辑框的缓冲区指针和显示区的缓冲区指针
+ * @Return: 
+ * @Throw: 
+ */
+gboolean isconnected = TRUE;
+
+void on_send(GtkButton * button,FromToWin* ftw)
+{
+    gchar *message;
+    GtkTextIter start,end;
+    if(isconnected==FALSE)  return;
+    gtk_text_buffer_get_bounds(ftw->from,&start,&end);
+    message = gtk_text_buffer_get_text(ftw->from,&start,&end,FALSE);
+    gtk_text_buffer_set_text(ftw->from,"",1);
+    gtk_text_buffer_get_end_iter(ftw->to,&end);
+    gtk_text_buffer_insert(ftw->to,&end,"server:  ",-1);
+    gtk_text_buffer_get_end_iter(ftw->to,&end);
+    gtk_text_buffer_insert(ftw->to,&end,"\n",-1);
+    gtk_text_buffer_get_end_iter(ftw->to,&end);
+    gtk_text_buffer_insert(ftw->to,&end,message,-1);
+    gtk_text_buffer_get_end_iter(ftw->to,&end);
+    gtk_text_buffer_insert(ftw->to,&end,"\n",-1);
+}
+
+/**
+ * @Author: 邓方晴
+ * @Description: 按下“消息记录”
+ * @Param: 
+ * @Return: 
+ * @Throw: 
+ */
+void CheckMessageLog(GtkWidget *widget, GdkEvent *event){
+    // TextView messagelog;
+    // GtkWidget *pop,*scroll;
+    // GtkTextIter end;
+    // messagelog.view = gtk_text_view_new();
+    // messagelog.view_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(messagelog.view));
+    
+
+    // gtk_text_buffer_insert(messagelog.view_buffer,"显示消息记录",100);
+    
+    // pop = gtk_window_new(GDK_WINDOW_TOPLEVEL);
+    // gtk_window_set_title(GTK_WINDOW(pop),"消息记录");
+    // gtk_window_set_default_size(GTK_WINDOW(pop),500,300);
+    // gtk_window_set_position(GTK_WINDOW(pop),GTK_WIN_POS_CENTER);
+    // gtk_container_set_border_width(GTK_CONTAINER(pop),10);
+    // g_signal_connect(G_OBJECT(pop),"delete_event",
+    //     G_CALLBACK(on_window_delete_event),NULL);
+
+    // scroll = gtk_scrolled_window_new(NULL,NULL);
+    // gtk_container_add(GTK_CONTAINER(scroll),messagelog.view);
+    // gtk_container_add(GTK_CONTAINER(pop), scroll);
+
+    // gtk_widget_show_all(pop);
+
+}

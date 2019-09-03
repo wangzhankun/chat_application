@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:44:55 -0700
- * @LastEditTime: 2019-09-02 00:54:18 -0700
+ * @LastEditTime: 2019-09-02 19:45:50 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -33,3 +33,5 @@ typedef int socketfd;
 
 
 ///////////////全局变量声明区/////////////
+GtkWidget *FriendWindow;
+GtkWidget *LoadingWindow;
