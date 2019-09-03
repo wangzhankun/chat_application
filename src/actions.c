@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-03 13:12:12 +0800
+ * @LastEditTime: 2019-09-03 21:18:15 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -52,8 +52,10 @@ void reUse(socketfd skf)
 ///////////////允许外部调用的函数////////////////////
 
 
-int sendDataToServer(char *data)
+int sendTextToServer(char *data)
 {
+    char buf[BUFFER_SIZE];
+    strcpy(buf,data);
     socketfd skf = createSocket(SOCK_STREAM, 0);
     struct sockaddr_in ser_addr;
     initialzeSocketaddr(&ser_addr, SERVER_ADDR, SERVER_PORT);

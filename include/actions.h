@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 10:03:32 +0800
- * @LastEditTime: 2019-09-03 10:54:35 +0800
+ * @LastEditTime: 2019-09-03 21:17:35 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -12,7 +12,7 @@
 #define __ACTIONS_H__
 #include "head.h"
 
-int sendDataToServer(char* data);
+int sendTextToServer(char* data);
 
 // void reUse(socketfd skf);
 
