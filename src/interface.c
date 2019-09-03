@@ -4,13 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 06:26:32 -0700
+ * @LastEditTime: 2019-09-03 07:42:18 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "callbacks.h"
 #include "interface.h"
+#include "mainprogram.h"
 
 TextView SendText,SeeText;
 GtkWidget *CreateSendToolbar(GtkWidget *window);
