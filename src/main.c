@@ -9,14 +9,15 @@
  * @Description: 
  */
 #include "head.h"
-#include "GTKCreateLoading.h"
-#include "Gtkfriendlist.h"
+#include "mainprogram.h"
+#include "callbacks.h"
+#include "interface.h"
 int main(int argc, char *argv[])
 {
-    GtkWidget *LoadingWindow;
     gtk_init(&argc, &argv);
     LoadingWindow = CreateLoading();
-    g_signal_connect(G_OBJECT(LoadingWindow), "destroy", G_CALLBACK(gtk_main_quit), NULL);
+     g_signal_connect(G_OBJECT(LoadingWindow), "delete_event",
+                     G_CALLBACK(on_window_delete_event), NULL);
     gtk_widget_show(LoadingWindow);
 
     // GtkWidget *ListWindow;

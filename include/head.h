@@ -24,8 +24,9 @@
 #include<string.h>  
 #include<errno.h>  
 #include<sys/types.h>   
-
-
+#include <pthread.h>
+#include <gdk/gdkkeysyms.h>
+#include <stdlib.h>
 /////////////define区////////////////////
 
 
@@ -44,6 +45,8 @@ typedef int socketfd;
 
 
 ///////////////全局变量声明区/////////////
-
+GtkWidget *FriendWindow;
+GtkWidget *LoadingWindow;
 
 #endif
+
