@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 05:28:33 -0700
- * @LastEditTime: 2019-09-03 18:52:53 -0700
+ * @LastEditTime: 2019-09-04 05:31:32 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -31,6 +31,7 @@ int main(int argc, gchar *argv[])
     //创建一个读取服务器信息的子线程
     //g_thread_create((GThreadFunc)recv_thread, NULL, FALSE, NULL);
     //自动更新的线程
+
     
     gdk_threads_enter();
     gtk_main();
