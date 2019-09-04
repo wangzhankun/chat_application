@@ -3,8 +3,8 @@
  * @Author: 王占坤
  * @File name: 
  * @Version: 
- * @Date: 2019-08-30 15:08:30 +0800
- * @LastEditTime: 2019-09-03 02:34:24 -0700
+ * @Date: 2019-08-31 19:44:55 -0700
+ * @LastEditTime: 2019-09-03 18:40:37 -0700
  * @LastEditors: 
  * @Description: 这里是主头文件，包含了所有的库文件，全局变量声明，结构体声明等
  */
@@ -26,17 +26,27 @@
 #include<sys/types.h>   
 #include <pthread.h>
 #include <gdk/gdkkeysyms.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
 #include <stdlib.h>
 /////////////define区////////////////////
-
+#define MAX_QUEUE_SIZE 500
 
 
 
 
 //////////////typedef区/////////////////
 typedef int socketfd;
-
-
+//从队列中读取服务器发送消息
+typedef struct QueueRecord
+{
+    int Capacity;
+    int Front;
+    int Rear;
+    int Size;
+    void **Array;
+}*Queue;
 
 
 /////////////全局结构体定义区//////////
@@ -47,6 +57,8 @@ typedef int socketfd;
 ///////////////全局变量声明区/////////////
 GtkWidget *FriendWindow;
 GtkWidget *LoadingWindow;
+Queue Q;
+
 
 #endif
 

@@ -10,6 +10,7 @@
  */
 #include "head.h"
 #include "interface.h"
+#include "mainprogram.h"
 const gchar *list_item_data_key = "list_item_data";
 //static int i = 1;
 GtkWidget *list;
@@ -44,6 +45,7 @@ GtkWidget * CreateFriendlist(void)
     gtklist = gtk_list_new();
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), gtklist);
     g_signal_connect(G_OBJECT(gtklist), "selection_changed", G_CALLBACK(sigh_print_selection), NULL);
+    //g_signal_connect(G_OBJECT(gtklist), "clicked", G_CALLBACK(sigh_print_selection), NULL);
 /////////////传入数据
     for (i = 0; i < 100; i++)
     {
@@ -72,10 +74,14 @@ void sigh_print_selection(GtkWidget *gtklist, gpointer func_data)
     while (dlist)
     {
         GtkWidget *TalkWindow;
+        
         const gchar *item_data_string;
         item_data_string = g_object_get_data(G_OBJECT(dlist->data), list_item_data_key);
         g_print("%s ", item_data_string);
+        
         TalkWindow=CreateTalkWindow(item_data_string);
+        
+        g_thread_create((GThreadFunc)auto_update_thread, NULL, FALSE, NULL);
         gtk_widget_show(TalkWindow);
         dlist = dlist->next;
     }
@@ -95,7 +101,9 @@ void list_add(int i)
     GtkWidget *list_item;
     PangoFontDescription *desc;
     gchar *string;
+    PangoFontDescription *desc;
     sprintf(buffer, "%d", i);
+    //label=gtk_button_new_with_label(buffer);
     label = gtk_label_new(buffer);
     gtk_misc_set_alignment(GTK_MISC(label), 0.15, 0.6);
     desc = pango_font_description_from_string("16");
