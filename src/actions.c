@@ -4,14 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-03 21:18:15 +0800
+ * @LastEditTime: 2019-09-04 11:13:35 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "actions.h"
-#define SERVER_PORT 8888
-#define SERVER_ADDR "0.0.0.0"
+// #define SERVER_PORT 8888
+// #define SERVER_ADDR "192.168.43.19"
 // #define TEST
 // // #define UDP
 // #define TCP
@@ -205,8 +205,8 @@ socketfd acceptConnection(socketfd sfk, struct sockaddr *addr, socklen_t len_add
  */
 int sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
-    if (n_bytes >= BUFSIZ)
-        n_bytes = BUFSIZ - 1;
+    if (n_bytes >= BUFFER_SIZE)
+        n_bytes = BUFFER_SIZE - 1;
     if (n_bytes < 0)
         n_bytes = 0;
 
@@ -217,8 +217,8 @@ int sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
         exit(1);
     }
 
-    if (num_of_sending_words >= BUFSIZ)
-        num_of_sending_words = BUFSIZ - 1;
+    if (num_of_sending_words >= BUFFER_SIZE)
+        num_of_sending_words = BUFFER_SIZE - 1;
     buff[num_of_sending_words] = 0;
     return 0;
 }
@@ -235,9 +235,9 @@ int sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
  */
 int receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
-    memset(buff, 0, BUFSIZ);
-    if (n_bytes > BUFSIZ)
-        n_bytes = BUFSIZ - 1;
+    memset(buff, 0, BUFFER_SIZE);
+    if (n_bytes > BUFFER_SIZE)
+        n_bytes = BUFFER_SIZE - 1;
     int num_of_reading_words = recv(skf, buff, n_bytes, flag);
     printf("num_of_reading_words: %d\n", num_of_reading_words);
     printf("%s\n", buff);
@@ -246,8 +246,8 @@ int receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
         printf("receive message error: %s(errno: %d)\n", strerror(errno), errno);
         exit(0);
     }
-    if (num_of_reading_words >= BUFSIZ)
-        num_of_reading_words = BUFSIZ - 1;
+    if (num_of_reading_words >= BUFFER_SIZE)
+        num_of_reading_words = BUFFER_SIZE - 1;
     buff[num_of_reading_words] = 0;
     return 0;
 }
