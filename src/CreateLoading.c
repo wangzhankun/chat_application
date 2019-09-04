@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-04 09:39:40 -0700
+ * @LastEditTime: 2019-09-04 09:47:43 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -313,7 +313,7 @@ GtkWidget *create_button1(void)
     GtkWidget *button;
     GtkWidget *align;
 
-    image = gtk_image_new_from_file("./pic/login.gif");
+    image = gtk_image_new_from_file("./pic/饼干.png");
     box = gtk_hbox_new(FALSE, 0);
     //gtk_image_set_pixel_size(image,50);
     gtk_container_set_border_width(GTK_CONTAINER(box), 10);
@@ -396,7 +396,7 @@ GtkWidget *ButtonLogo(void)
     GtkWidget *button;
     GtkWidget *align;
 
-    image = gtk_image_new_from_file("./pic/horse.gif");//login.gif
+    image = gtk_image_new_from_file("./pic/shalou.gif");//login.gif
     box = gtk_hbox_new(FALSE, 0);
     gtk_container_set_border_width(GTK_CONTAINER(box), 2);
     gtk_box_pack_start(GTK_BOX(box), image, TRUE, TRUE, 0);
