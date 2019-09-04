@@ -4,12 +4,13 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:45:05 -0700
- * @LastEditTime: 2019-09-03 07:42:20 -0700
+ * @LastEditTime: 2019-09-03 20:09:59 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "interface.h"
+#include "mainprogram.h"
 /**
  * @Author: 王可欣
  * @Description: 在输入框中插入表情
@@ -254,20 +255,25 @@ void on_send(GtkButton *button, FromToWin *ftw)
         return;
     gtk_text_buffer_get_bounds(ftw->from, &start, &end);
     gtk_text_buffer_get_start_iter(ftw->to,&show);
+
     message = gtk_text_buffer_get_text(ftw->from, &start, &end, FALSE);
+
     gtk_text_buffer_get_end_iter(ftw->to, &show);
     gtk_text_buffer_insert(ftw->to, &show, "server:  ", -1);
     gtk_text_buffer_get_end_iter(ftw->to, &show);
     gtk_text_buffer_insert(ftw->to, &show, "\n", -1);
     gtk_text_buffer_get_end_iter(ftw->to, &show);
+
     gtk_text_buffer_insert(ftw->to, &show, message, -1);
     gtk_text_buffer_get_end_iter(ftw->to, &show);
     gtk_text_buffer_insert(ftw->to, &show, "\n", -1);
+
     gtk_text_buffer_insert_range(ftw->to,&show,&start,&end);
-    gtk_text_buffer_insert(ftw->to,&show,"\n",-1);
+  //  gtk_text_buffer_insert(ftw->to,&show,"\n",-1);
 
 
     gtk_text_buffer_set_text(ftw->from, "", 1);
+    g_thread_create((GThreadFunc)auto_update_thread, NULL, FALSE, NULL);
 }
 
 /**
