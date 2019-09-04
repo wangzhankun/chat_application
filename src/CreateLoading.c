@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-04 04:55:28 -0700
+ * @LastEditTime: 2019-09-04 09:39:40 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -396,7 +396,7 @@ GtkWidget *ButtonLogo(void)
     GtkWidget *button;
     GtkWidget *align;
 
-    image = gtk_image_new_from_file("./pic/login.gif");//login.gif
+    image = gtk_image_new_from_file("./pic/horse.gif");//login.gif
     box = gtk_hbox_new(FALSE, 0);
     gtk_container_set_border_width(GTK_CONTAINER(box), 2);
     gtk_box_pack_start(GTK_BOX(box), image, TRUE, TRUE, 0);

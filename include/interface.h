@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-04 05:31:29 -0700
+ * @LastEditTime: 2019-09-04 09:04:26 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -76,8 +76,8 @@ void on_send(GtkButton * button,FromToWin* ftw);
 GtkWidget* CreateMainWindow( void );
 GtkWidget* CreateTalkWindow( char * name );
 GtkWidget* CreateLoading(void);
-GtkWidget* CreateFriendlist(void);
-
+GtkWidget * CreateFriendlist(GtkWidget *page);
+GtkWidget* CreateGrouplist(GtkWidget *page);
 
 FromToWin *chatwin;
 #endif
