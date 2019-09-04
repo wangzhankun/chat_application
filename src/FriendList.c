@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-02 03:31:32 -0700
- * @LastEditTime: 2019-09-04 06:17:53 -0700
+ * @LastEditTime: 2019-09-04 09:11:55 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -25,7 +25,7 @@ static void sigh_print_selection(GtkWidget *gtklist, gpointer func_data);
  * @Param: 
  * @Return: 
  */
-GtkWidget * CreateFriendlist(void)
+GtkWidget * CreateFriendlist(GtkWidget *page)
 {
     GtkWidget *vbox;
     GtkWidget *view;

@@ -23,6 +23,6 @@ void on_cancel (GtkButton *button,gpointer data);
 void on_ok (GtkButton* button, gpointer data);
 void EditInformation(GtkMenuItem *menuitem, gpointer data);
 void EditBackground(GtkMenuItem *menuitem, gpointer data);
-
+void ClickedGroup(GtkWidget *button, gpointer window);
 #endif
 
