@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-03 07:42:14 -0700
+ * @LastEditTime: 2019-09-03 18:54:28 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -223,6 +223,10 @@ void ClickedLoading(GtkWidget *button, gpointer data)
     }
     if (flag == 0)
     {
+        // if (do_connect())
+        // {
+        //     g_thread_create((GThreadFunc)get_message, NULL, FALSE, NULL);
+        // }
         gtk_widget_hide_all(LoadingWindow);
         FriendWindow = CreateMainWindow();
         g_print("用户名是:%s ", username);

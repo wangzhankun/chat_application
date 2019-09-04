@@ -35,6 +35,7 @@ typedef struct SelfInfo{
     char *NickName;
     char *ID;
 }Self;
+
 //头像结构
 typedef struct portraitInfo{
     GtkWidget *sticker_window;
@@ -73,4 +74,6 @@ GtkWidget* CreateTalkWindow( char * name );
 GtkWidget* CreateLoading(void);
 GtkWidget* CreateFriendlist(void);
 
+
+FromToWin *chatwin;
 #endif
