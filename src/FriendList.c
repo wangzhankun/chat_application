@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-02 03:31:32 -0700
- * @LastEditTime: 2019-09-04 04:59:38 -0700
+ * @LastEditTime: 2019-09-04 06:17:53 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -101,7 +101,6 @@ void list_add(int i)
     GtkWidget *list_item;
     PangoFontDescription *desc;
     gchar *string;
-    PangoFontDescription *desc;
     sprintf(buffer, "%d", i);
     //label=gtk_button_new_with_label(buffer);
     label = gtk_label_new(buffer);
