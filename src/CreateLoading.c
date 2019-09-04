@@ -4,12 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-03 18:54:28 -0700
+ * @LastEditTime: 2019-09-04 21:00:04 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "interface.h"
+#include "actions.h"
+#include "DataTransformInterface.h"
 static GtkWidget *entry1;
 static GtkWidget *entry2;
 static GtkWidget *CheckIDentry;
@@ -227,12 +229,23 @@ void ClickedLoading(GtkWidget *button, gpointer data)
         // {
         //     g_thread_create((GThreadFunc)get_message, NULL, FALSE, NULL);
         // }
+        // sendTextToServer(username);
+
+        char ip[BUFFER_SIZE];
+        memset(ip,0,sizeof(ip));
+        getLocalIP(ip);
+        printf("%s\n",ip);
+        cJSON *data = cJSON_CreateObject();
+        encodeLoginInfo(username, ip, password, data);
+        sendTextToServer(data);
+        cJSON_Delete(data);
+
         gtk_widget_hide_all(LoadingWindow);
         FriendWindow = CreateMainWindow();
-        g_print("用户名是:%s ", username);
-        g_print("\n");
-        g_print("密码是:%s ", password);
-        g_print("\n");
+        // g_print("用户名是:%s ", username);
+        // g_print("\n");
+        // g_print("密码是:%s ", password);
+        // g_print("\n");
     }
 }
 

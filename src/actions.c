@@ -4,12 +4,13 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-04 11:47:04 +0800
+ * @LastEditTime: 2019-09-04 22:18:25 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "actions.h"
+#include "DataTransformInterface.h"
 // #define SERVER_PORT 8888
 // #define SERVER_ADDR "192.168.43.19"
 // #define TEST
@@ -25,41 +26,112 @@
 // #define SOCKET_TYPE SOCK_STREAM
 // #endif
 
-
 //////////////////不允许外部调用的函数//////////////
 
 /**
  * @Author: 王占坤
- * @Description: 不允许外部调用
- * @Param: 
+ * @Description: 获取本机IP地址
+ * @Param: char* IP 一个char指针，用于保存IP
  * @Return: 
+ * @Throw: 
+ */
+void getLocalIP(char *IP)
+{
+    int inet_sock;
+    struct ifreq ifr;
+    inet_sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+    strcpy(ifr.ifr_name, "ens33");
+    //SIOCGIFADDR标志代表获取接口地址
+    if (ioctl(inet_sock, SIOCGIFADDR, &ifr) < 0)
+        perror("ioctl");
+    char* ip = inet_ntoa(((struct sockaddr_in *)&(ifr.ifr_addr))->sin_addr);
+    printf("%s\n", inet_ntoa(((struct sockaddr_in *)&(ifr.ifr_addr))->sin_addr));
+    int i = 0;
+    while (*ip != 0)
+    {
+        IP[i] = *ip;
+        ip++;
+        printf("%c\n",IP[i]);
+        i++;
+    }
+    
+    // strcpy(IP,ip);
+    
+    // struct hostent *he;
+    // char hostname[20] = {0};
+
+    // gethostname(hostname, sizeof(hostname));
+    // he = gethostbyname(hostname);
+    // printf("hostname=%s\n", hostname);
+    // IP = inet_ntoa(*(struct in_addr*)he->h_addr_list[0]);
+    // printf("%s\n",IP);
+    // IP = inet_ntoa(*(struct in_addr*)he->h_addr_list[1]);
+    // printf("%s\n",IP);
+
+    // IP = inet_ntoa(*(struct in_addr*)he->h_addr_list[2]);
+    // printf("%s\n",IP);
+
+    // IP = inet_ntoa(*(struct in_addr*)he->h_addr_list[3]);
+    // printf("%s\n",IP);
+
+    // IP =  inet_ntoa(*(struct in_addr *)(he->h_addr));
+}
+
+/**
+ * @Author: 王占坤
+ * @Description: 不允许外部调用.用于重用端口、地址
+ * @Param: socketfd skf 传入需要进行服用的socketfd
+ * @Return: NULL
  * @Throw: 
  */
 void reUse(socketfd skf)
 {
     INT16 optval = 1;
     int res = setsockopt(skf, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
-    if(res == -1)
+    if (res == -1)
     {
         perror("setsockopt");
     }
 }
-void *thread_hander(void *arg)
+/**
+ * @Author: 王占坤
+ * @Description: 不允许外部调用。在接受收消息之后调用
+ * @Param: void* skf传入创建的接收消息的句柄
+ * @Return: NULL
+ * @Throw: 
+ */
+void *createNewSKFToReceiveMSG(void *skf)
 {
-    int sock = *((int *)arg);
+    socketfd sock = *((socketfd *)skf);
     char buf[1024];
     receiveMSG(sock, buf, sizeof(buf), 0);
+    printf("%s\n",buf);
+    cJSON *data = (cJSON *)buf;
+    memset(buf, 0, sizeof(buf));
+    getTypeFromCJSON(data, buf);
+    if (strcmp(buf, "user_file") == 0) //成功匹配
+    {
+    }
+    else
+    {
+    }
     printf("%s\n", buf);
     close(sock);
     printf("closed\n");
 }
+/**
+ * @Author: 王占坤
+ * @Description: 不允许外部调用。用于阻塞等待连接请求。
+ * @Param: socketfd ser_skf 用于等待连接请求的socketfd句柄
+ * @Return: 
+ * @Throw: 
+ */
 int recvMSGFromClient(socketfd ser_skf)
 {
-    // printf("waiting!\n");
-    // int sock = accept(ser_skf, NULL, NULL);
     socketfd sock = acceptConnection(ser_skf, NULL, NULL);
     pthread_t tid;
-    int ret = pthread_create(&tid, NULL, thread_hander, &sock);
+    int ret = pthread_create(&tid, NULL, createNewSKFToReceiveMSG, &sock);
     if (ret < 0)
     {
         perror("pthread_create");
@@ -67,27 +139,31 @@ int recvMSGFromClient(socketfd ser_skf)
     }
     pthread_detach(tid);
 }
+/**
+ * @Author: 王占坤
+ * @Description: 不允许外部调用。用于创建server句柄，开启监听，
+ * @Param: 无
+ * @Return: socketfd 建立好的用于监听的句柄
+ * @Throw: 
+ */
 socketfd startServerTillListen()
 {
     socketfd ser_skf = createSocket(SOCK_STREAM, 0);
     struct sockaddr_in ser_addr;
-    initialzeSocketaddr((struct sockaddr *)&ser_addr, SERVER_ADDR, SERVER_PORT);
+    initialzeSocketaddr((struct sockaddr *)&ser_addr, NULL, SERVER_PORT);
     bindSocketAddr(ser_skf, (struct sockaddr *)&ser_addr, sizeof(ser_addr));
     struct sockaddr_in client;
     createListen(ser_skf, 200);
     return ser_skf;
 }
 
-
-
-
 ///////////////允许外部调用的函数////////////////////
 
 /**
  * @Author: 王占坤
- * @Description: 这个是需要在客户端启用的接收信息的进程
- * @Param: 
- * @Return: 
+ * @Description: 这个是需要在客户端启用的接收信息的进程。进入main函数之后就必须启用该线程并与主线程分离
+ * @Param: 无
+ * @Return: 无
  * @Throw: 
  */
 void startListen()
@@ -99,23 +175,24 @@ void startListen()
     }
 }
 
-
+/**
+ * @Author: 王占坤
+ * @Description: 用于客户端发送消息到接收方的接口
+ * @Param: 
+ * @Return: 
+ * @Throw: 
+ */
 int sendTextToServer(char *data)
 {
     char buf[BUFFER_SIZE];
-    strcpy(buf,data);
+    strcpy(buf, data);
     socketfd skf = createSocket(SOCK_STREAM, 0);
     struct sockaddr_in ser_addr;
     initialzeSocketaddr(&ser_addr, SERVER_ADDR, SERVER_PORT);
-    createConnection(skf, (struct sockaddr*)&ser_addr, sizeof(ser_addr));
-    sendMSG(skf, data, strlen(data), 0);
-    // printf("%s\n",data);
-    // printf("%d\n",strlen(data));
+    createConnection(skf, (struct sockaddr *)&ser_addr, sizeof(ser_addr));
+    sendMSG(skf, data, BUFFER_SIZE, 0);
     close(skf);
 }
-
-
-
 
 /**
  * @Author: 王占坤
@@ -140,7 +217,6 @@ void createConnection(socketfd skf, struct sockaddr *serv_addr, size_t addr_len)
         exit(1);
     }
 }
-
 
 /**
  * @Author: 王占坤
@@ -225,7 +301,6 @@ void createListen(socketfd skf, int num)
     }
 }
 
-
 /**
  * @Author: 王占坤
  * @Description: 监听到有连接时进行连接
@@ -245,7 +320,6 @@ socketfd acceptConnection(socketfd sfk, struct sockaddr *addr, socklen_t len_add
     }
     return cli_skf;
 }
-
 
 /**
  * @Author: 王占坤
@@ -339,7 +413,6 @@ int main(int argc, char *argv[])
 
     connect(int fd, (struct sockaddr *)&addr, socklen_t len_addr);
 
-
     char buff[1024];
     struct sockaddr_in addr;
 
@@ -361,7 +434,6 @@ int main(int argc, char *argv[])
 
     // printf("%d\n", listen(server_socket, 5));
     createListen(server_socket, 5);
-
 
     client_socket = acceptConnection(server_socket, (struct sockaddr *)NULL, 0);
     // acceptConnection(&client_socket, &server_socket, (struct sockaddr*)NULL, NULL);
