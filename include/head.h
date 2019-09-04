@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:44:55 -0700
- * @LastEditTime: 2019-09-04 20:11:46 +0800
+ * @LastEditTime: 2019-09-04 22:53:28 +0800
  * @LastEditors: 
  * @Description: 这里是主头文件，包含了所有的库文件，全局变量声明，结构体声明等
  */
@@ -16,6 +16,8 @@
 #include <cjson/cJSON.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#include <sys/msg.h>
 
 #include <sys/ioctl.h>
 #include <net/if.h>
