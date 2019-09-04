@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 10:03:32 +0800
- * @LastEditTime: 2019-09-04 19:53:14 +0800
+ * @LastEditTime: 2019-09-05 03:20:45 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -12,7 +12,7 @@
 #define __ACTIONS_H__
 #include "head.h"
 
-void getLocalIP();
+void getLocalIP(char*);
 
 void startListen();
 

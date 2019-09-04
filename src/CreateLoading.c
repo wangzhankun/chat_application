@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 19:43:01 -0700
- * @LastEditTime: 2019-09-05 02:49:56 +0800
+ * @LastEditTime: 2019-09-05 03:20:40 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -65,9 +65,9 @@ void on_button_clicked(GtkWidget *button, gpointer window)
         cJSON* data = cJSON_CreateObject();
         char ip[50];
         memset(ip, 0, sizeof(ip));
+        getLocalIP(ip);
         encodeLoginInfo(username, ip, password, data);
         sendTextToServer(data);
-        cJSON_Delete(data);
         //跳转到好友列表
         gtk_widget_hide_all(LoadingWindow);
         FriendWindow = CreateMainWindow();

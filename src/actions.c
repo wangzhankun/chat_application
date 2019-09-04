@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-04 23:47:53 +0800
+ * @LastEditTime: 2019-09-05 03:27:52 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -46,19 +46,19 @@ void getLocalIP(char *IP)
     //SIOCGIFADDR标志代表获取接口地址
     if (ioctl(inet_sock, SIOCGIFADDR, &ifr) < 0)
         perror("ioctl");
-    char* ip = inet_ntoa(((struct sockaddr_in *)&(ifr.ifr_addr))->sin_addr);
+    char *ip = inet_ntoa(((struct sockaddr_in *)&(ifr.ifr_addr))->sin_addr);
     printf("%s\n", inet_ntoa(((struct sockaddr_in *)&(ifr.ifr_addr))->sin_addr));
     int i = 0;
     while (*ip != 0)
     {
         IP[i] = *ip;
         ip++;
-        printf("%c\n",IP[i]);
+        printf("%c\n", IP[i]);
         i++;
     }
-    
+
     // strcpy(IP,ip);
-    
+
     // struct hostent *he;
     // char hostname[20] = {0};
 
@@ -108,7 +108,7 @@ void *createNewSKFToReceiveMSG(void *skf)
     char buf[1024];
     memset(buf, 0, sizeof(buf));
     receiveMSG(sock, buf, sizeof(buf), 0);
-    printf("%s\n",buf);
+    printf("%s\n", buf);
     cJSON *data = (cJSON *)buf;
     getTypeFromCJSON(data, buf);
     if (strcmp(buf, "user_file") == 0) //成功匹配
@@ -118,7 +118,7 @@ void *createNewSKFToReceiveMSG(void *skf)
     {
         PushMessage(buf);
     }
-    printf("%s\n", (char*)buf);
+    printf("%s\n", (char *)buf);
     close(sock);
     printf("closed\n");
 }
@@ -186,13 +186,15 @@ void startListen()
  */
 int sendTextToServer(char *data)
 {
-    char buf[BUFFER_SIZE];
-    strcpy(buf, data);
+    char *buf = cJSON_Print((cJSON*)data);
+    cJSON_Delete((cJSON*)data);
+    printf("%s\n",buf);
     socketfd skf = createSocket(SOCK_STREAM, 0);
     struct sockaddr_in ser_addr;
     initialzeSocketaddr(&ser_addr, SERVER_ADDR, SERVER_PORT);
     createConnection(skf, (struct sockaddr *)&ser_addr, sizeof(ser_addr));
-    sendMSG(skf, data, BUFFER_SIZE, 0);
+    sendMSG(skf, buf, BUFFER_SIZE, 0);
+    free(buf);
     close(skf);
 }
 
