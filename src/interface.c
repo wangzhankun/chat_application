@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 07:42:18 -0700
+ * @LastEditTime: 2019-09-04 05:22:15 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,7 +13,7 @@
 #include "interface.h"
 #include "mainprogram.h"
 
-TextView SendText,SeeText;
+TextView SendText, SeeText;
 GtkWidget *CreateSendToolbar(GtkWidget *window);
 GtkWidget *CreateMainToolbar(GtkWidget *window);
 GtkWidget *CreateS(GtkWidget *window);
@@ -22,21 +22,26 @@ static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
                         gint x, gint y, GtkSelectionData *data, guint info, guint time, gpointer user_data);
 
 /**
- * @Author: 王可欣
+ * @Author: 王可欣 何禾子
  * @Description: 好友列表（主界面）
+ * @add Description:添加了个性签名,修改了上端界面
  * @Param: 
  * @Return: 
  */
 GtkWidget *CreateMainWindow(void)
 {
     GtkWidget *MainWindow;
-    GtkWidget *SelfBox;     //放置个人信息
+    GtkWidget *SelfBox; //放置个人信息
+    GtkWidget *sep;
+    GtkWidget *listsep;
     GtkWidget *SelfTextBox; //防止名字和ID部分
     GtkWidget *FrinedBox;   //好友列表
     GtkWidget *ScrollFriend;
     GtkWidget *SelfImage;
     GtkWidget *NickLable;
     GtkWidget *IDLable;
+    GtkWidget *MottoLable;
+    GtkWidget *ListLable;
     GtkWidget *FriendBox;
     GtkWidget *PaneBetweenSelfAndFriend;
     GtkWidget *panel;
@@ -45,12 +50,15 @@ GtkWidget *CreateMainWindow(void)
     GtkWidget *MainBox; //竖版box
     GtkWidget *align;
     PangoFontDescription *desc;
+    PangoFontDescription *desc1;
 
     Self *SelfInfo = (Self *)malloc(sizeof(Self));
-    SelfInfo->ID = "小明";
-    SelfInfo->NickName = "ssssss";
+    SelfInfo->ID = "112078963";
+    SelfInfo->NickName = "王可欣";
+    SelfInfo->Motto = "风过了,花香还在";
     MainWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_position(GTK_WINDOW(MainWindow), GTK_WIN_POS_CENTER);
+    // gtk_window_set_position(GTK_WINDOW(MainWindow), GTK_WIN_POS_CENTER);
+    gtk_window_move(MainWindow, 1000, 20);
 
     gtk_window_set_title(GTK_WINDOW(MainWindow), "好友列表");
     g_signal_connect(G_OBJECT(MainWindow), "destroy",
@@ -62,19 +70,27 @@ GtkWidget *CreateMainWindow(void)
     // gtk_widget_set_size_request(GTK_BOX(SelfTextBox),30,20);
 
     SelfImage = gtk_image_new_from_file("./bin/pic/head.png");
-    gtk_container_add(GTK_CONTAINER(SelfBox), SelfImage);
+    gtk_box_pack_start(GTK_BOX(SelfBox), SelfImage, FALSE, FALSE, 1);
+    sep = gtk_vseparator_new();
+    gtk_box_pack_start(GTK_BOX(SelfBox), sep, FALSE, FALSE, 1);
 
     SelfTextBox = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(SelfBox), SelfTextBox);
-    FrinedBox = gtk_vbox_new(FALSE, 0);
-
-    IDLable = gtk_label_new(SelfInfo->ID);
-    gtk_container_add(GTK_CONTAINER(SelfTextBox), IDLable);
+    //昵称
     NickLable = gtk_label_new(SelfInfo->NickName);
-    gtk_container_add(GTK_CONTAINER(SelfTextBox), NickLable);
+    gtk_box_pack_start(GTK_BOX(SelfTextBox), NickLable, FALSE, FALSE, 1);
+    //账号
+    IDLable = gtk_label_new(SelfInfo->ID);
+    gtk_box_pack_start(GTK_BOX(SelfTextBox), IDLable, FALSE, FALSE, 1);
+    //个性签名
+    MottoLable = gtk_label_new(SelfInfo->Motto);
+    gtk_box_pack_start(GTK_BOX(SelfTextBox), MottoLable, FALSE, FALSE, 1);
 
-    desc = pango_font_description_from_string("Simhei 24");
-    gtk_widget_modify_font(IDLable, desc);
+    desc = pango_font_description_from_string("Simhei 25");
+    gtk_widget_modify_font(NickLable, desc);
+    desc1 = pango_font_description_from_string("Simhei 10");
+    gtk_widget_modify_font(IDLable, desc1);
+    gtk_widget_modify_font(MottoLable, desc1);
 
     gtk_widget_set_size_request(GTK_BOX(SelfBox), 300, 100);
     align = gtk_alignment_new(0, 0, 0, 0);
@@ -83,9 +99,14 @@ GtkWidget *CreateMainWindow(void)
     MainBox = gtk_vbox_new(FALSE, 0);
     gtk_container_add(GTK_CONTAINER(MainBox), align);
 
+    listsep = gtk_hseparator_new();
+    gtk_box_pack_start(GTK_BOX(MainBox),listsep, FALSE, FALSE, 1);
+    ListLable = gtk_label_new("好友列表");
+    gtk_box_pack_start(GTK_BOX(MainBox), ListLable, FALSE, FALSE, 1);
     //好友列表
+    FrinedBox = gtk_vbox_new(FALSE, 0);
     FriendBox = CreateFriendlist();
-    gtk_widget_set_size_request(GTK_BOX(FriendBox), 300, 520);
+    gtk_widget_set_size_request(GTK_BOX(FriendBox), 250, 520);
     gtk_container_add(GTK_CONTAINER(MainBox), FriendBox);
 
     //工具栏
@@ -107,7 +128,7 @@ GtkWidget *CreateMainWindow(void)
  * @Param: 
  * @Return: 
  */
-GtkWidget *CreateTalkWindow(char * name)
+GtkWidget *CreateTalkWindow(char *name)
 {
     GtkWidget *TalkWindow;
     GtkWidget *scrolledwinup, *scrolledwindown;
@@ -121,7 +142,7 @@ GtkWidget *CreateTalkWindow(char * name)
     TalkWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(TalkWindow), name);
     gtk_window_set_default_size(GTK_WINDOW(TalkWindow), 800, 500);
-    gtk_window_set_position(GTK_WINDOW(TalkWindow), GTK_WIN_POS_CENTER);
+    gtk_window_set_position(GTK_WINDOW(TalkWindow),GTK_WIN_POS_CENTER);
     gtk_container_set_border_width(GTK_CONTAINER(TalkWindow), 10);
 
     hPaned = gtk_hpaned_new();
@@ -200,16 +221,15 @@ GtkWidget *CreateSendToolbar(GtkWidget *window)
 {
 
     GtkWidget *toolbar;
-    GtkWidget *StickerIcon, *DocuIcon,* RecIcon;
+    GtkWidget *StickerIcon, *DocuIcon, *RecIcon;
     GtkWidget *sticker;
-    GtkWidget* record;
+    GtkWidget *record;
     GtkToolItem *OpenDocu;
-
 
     toolbar = gtk_toolbar_new();
     StickerIcon = gtk_image_new_from_file("./bin/pic/pic.png");
     DocuIcon = gtk_image_new_from_file("./bin/pic/document.png");
-    RecIcon=gtk_image_new_from_file("./bin/pic/record.png");
+    RecIcon = gtk_image_new_from_file("./bin/pic/record.png");
     gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
     sticker = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "发送表情", "Private", StickerIcon,
@@ -233,13 +253,13 @@ GtkWidget *CreateMainToolbar(GtkWidget *window)
     GtkWidget *toolbar;
     GtkWidget *StickerIcon, *DocuIcon;
     GtkWidget *sticker;
-    GtkToolItem *OpenDocu;   
+    GtkToolItem *OpenDocu;
 
     toolbar = gtk_toolbar_new();
     StickerIcon = gtk_image_new_from_file("./bin/pic/setting.png");
 
     sticker = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "设置", "Private", StickerIcon,
-                                      GTK_SIGNAL_FUNC(BackToLoading) , NULL);                                  
+                                      GTK_SIGNAL_FUNC(BackToLoading), NULL);
     return toolbar;
 }
 
@@ -278,4 +298,3 @@ static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
     }
     gtk_drag_finish(context, TRUE, TRUE, time);
 }
-
