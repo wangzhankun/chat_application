@@ -4,21 +4,23 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-03 01:06:52 -0700
+ * @LastEditTime: 2019-09-03 01:54:27 -0700
  * @LastEditors: 
  * @Description: 
  */
 #ifndef __INTERFACE_H__
 #define __INTERFACE_H__
-
-
+#define LOADING 1
+#define TALKING 2
 
 ///////////////////////////结构体定义区///////////////////////
+
 
 
 typedef struct from_to_windows{
     GtkTextBuffer *from;
     GtkTextBuffer *to;
+    int type;
 }FromToWin;
 
 typedef struct _WinAppear

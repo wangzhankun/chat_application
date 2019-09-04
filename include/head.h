@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:44:55 -0700
- * @LastEditTime: 2019-09-02 19:45:50 -0700
+ * @LastEditTime: 2019-09-03 02:06:41 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include <pthread.h>
+#include <gdk/gdkkeysyms.h>
 
 
 /////////////define区////////////////////
