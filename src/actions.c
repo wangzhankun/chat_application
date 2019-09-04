@@ -4,14 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
-/*
- * @LastEditTime: 2019-09-02 14:49:00 +0800
+ * @LastEditTime: 2019-09-04 11:47:04 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "actions.h"
-// #define PORT 8888
+// #define SERVER_PORT 8888
+// #define SERVER_ADDR "192.168.43.19"
 // #define TEST
 // // #define UDP
 // #define TCP
@@ -25,6 +25,98 @@
 // #define SOCKET_TYPE SOCK_STREAM
 // #endif
 
+
+//////////////////不允许外部调用的函数//////////////
+
+/**
+ * @Author: 王占坤
+ * @Description: 不允许外部调用
+ * @Param: 
+ * @Return: 
+ * @Throw: 
+ */
+void reUse(socketfd skf)
+{
+    INT16 optval = 1;
+    int res = setsockopt(skf, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
+    if(res == -1)
+    {
+        perror("setsockopt");
+    }
+}
+void *thread_hander(void *arg)
+{
+    int sock = *((int *)arg);
+    char buf[1024];
+    receiveMSG(sock, buf, sizeof(buf), 0);
+    printf("%s\n", buf);
+    close(sock);
+    printf("closed\n");
+}
+int recvMSGFromClient(socketfd ser_skf)
+{
+    // printf("waiting!\n");
+    // int sock = accept(ser_skf, NULL, NULL);
+    socketfd sock = acceptConnection(ser_skf, NULL, NULL);
+    pthread_t tid;
+    int ret = pthread_create(&tid, NULL, thread_hander, &sock);
+    if (ret < 0)
+    {
+        perror("pthread_create");
+        return 6;
+    }
+    pthread_detach(tid);
+}
+socketfd startServerTillListen()
+{
+    socketfd ser_skf = createSocket(SOCK_STREAM, 0);
+    struct sockaddr_in ser_addr;
+    initialzeSocketaddr((struct sockaddr *)&ser_addr, SERVER_ADDR, SERVER_PORT);
+    bindSocketAddr(ser_skf, (struct sockaddr *)&ser_addr, sizeof(ser_addr));
+    struct sockaddr_in client;
+    createListen(ser_skf, 200);
+    return ser_skf;
+}
+
+
+
+
+///////////////允许外部调用的函数////////////////////
+
+/**
+ * @Author: 王占坤
+ * @Description: 这个是需要在客户端启用的接收信息的进程
+ * @Param: 
+ * @Return: 
+ * @Throw: 
+ */
+void startListen()
+{
+    socketfd ser_skf = startServerTillListen();
+    while (1)
+    {
+        recvMSGFromClient(ser_skf);
+    }
+}
+
+
+int sendTextToServer(char *data)
+{
+    char buf[BUFFER_SIZE];
+    strcpy(buf,data);
+    socketfd skf = createSocket(SOCK_STREAM, 0);
+    struct sockaddr_in ser_addr;
+    initialzeSocketaddr(&ser_addr, SERVER_ADDR, SERVER_PORT);
+    createConnection(skf, (struct sockaddr*)&ser_addr, sizeof(ser_addr));
+    sendMSG(skf, data, strlen(data), 0);
+    // printf("%s\n",data);
+    // printf("%d\n",strlen(data));
+    close(skf);
+}
+
+
+
+
 /**
  * @Author: 王占坤
  * @Description: 在skf上创建一个到serv_addr的连接
@@ -34,14 +126,14 @@
  * @Return: 
  * @Throw: 
  */
-void createConnection(socketfd skf, struct sockaddr* serv_addr, size_t addr_len)
+void createConnection(socketfd skf, struct sockaddr *serv_addr, size_t addr_len)
 {
-    if(serv_addr == NULL)
+    if (serv_addr == NULL)
     {
         printf("地址不存在！\n");
     }
-    int res = connect(skf, serv_addr, &addr_len);
-    if(res == -1)
+    int res = connect(skf, serv_addr, addr_len);
+    if (res == -1)
     {
         perror("connect");
         printf("create connection error: %s(errno: %d)\n", strerror(errno), errno);
@@ -49,7 +141,6 @@ void createConnection(socketfd skf, struct sockaddr* serv_addr, size_t addr_len)
     }
 }
 
->>>>>>> wangzhankun
 
 /**
  * @Author: 王占坤
@@ -70,7 +161,10 @@ socketfd createSocket(int type, int protocol)
         exit(1);
     }
     else
+    {
+        reUse(skf);
         return skf;
+    }
 }
 
 /**
@@ -160,13 +254,13 @@ socketfd acceptConnection(socketfd sfk, struct sockaddr *addr, socklen_t len_add
  * @Param: char* buff  缓冲区
  * @Param: size_t n_bytes 要发送的字节数目
  * @Param: flag 一般默认为0即可
- * @Return: 
+ * @Return: int 0:成功
  * @Throw: 
  */
-void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
+int sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
-    if (n_bytes >= BUFSIZ)
-        n_bytes = BUFSIZ - 1;
+    if (n_bytes >= BUFFER_SIZE)
+        n_bytes = BUFFER_SIZE - 1;
     if (n_bytes < 0)
         n_bytes = 0;
 
@@ -177,9 +271,10 @@ void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
         exit(1);
     }
 
-    if (num_of_sending_words >= BUFSIZ)
-        num_of_sending_words = BUFSIZ - 1;
+    if (num_of_sending_words >= BUFFER_SIZE)
+        num_of_sending_words = BUFFER_SIZE - 1;
     buff[num_of_sending_words] = 0;
+    return 0;
 }
 
 /**
@@ -189,27 +284,29 @@ void sendMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
  * @Param: char *buff  用于存储的缓冲
  * @Param: size_t n_bytes 最大接受多少字节的信息
  * @Param: int flag 一般传入为0即可
- * @Return: 
+ * @Return: int 0:成功
  * @Throw: 
  */
 
-void receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
+int receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
 {
-    memset(buff, 0, BUFSIZ);
-    if (n_bytes > BUFSIZ)
-        n_bytes = BUFSIZ - 1;
+    memset(buff, 0, BUFFER_SIZE);
+    if (n_bytes > BUFFER_SIZE)
+        n_bytes = BUFFER_SIZE - 1;
     int num_of_reading_words = recv(skf, buff, n_bytes, flag);
-    printf("num_of_reading_words: %d\n", num_of_reading_words);
-    printf("%s\n", buff);
+    // printf("num_of_reading_words: %d\n", num_of_reading_words);
+    // printf("%s\n", buff);
     if (num_of_reading_words == -1) //失败
     {
         printf("receive message error: %s(errno: %d)\n", strerror(errno), errno);
         exit(0);
     }
 
-    if (num_of_reading_words >= BUFSIZ)
-        num_of_reading_words = BUFSIZ - 1;
+    if (num_of_reading_words >= BUFFER_SIZE)
+        num_of_reading_words = BUFFER_SIZE - 1;
+
     buff[num_of_reading_words] = 0;
+    return 0;
 }
 
 /**
@@ -239,6 +336,10 @@ void writeBack(socketfd skf, const void *buff, size_t n_bytes, int flag)
 
 int main(int argc, char *argv[])
 {
+
+    connect(int fd, (struct sockaddr *)&addr, socklen_t len_addr);
+
+
     char buff[1024];
     struct sockaddr_in addr;
 
