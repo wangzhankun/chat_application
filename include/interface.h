@@ -34,6 +34,7 @@ typedef struct _WinAppear
 typedef struct SelfInfo{
     char *NickName;
     char *ID;
+    char *Motto;
 }Self;
 
 //头像结构

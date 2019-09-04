@@ -31,3 +31,9 @@
 *.out
 *.app
 **/build/**
+
+
+**/build/**
+build/**
+*test*
+*makefile*

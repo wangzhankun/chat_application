@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "head.h": "c",
+        "actions.h": "c",
+        "mainprogram.h": "c"
+    }
+}
