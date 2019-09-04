@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-05 00:43:22 +0800
- * @LastEditTime: 2019-09-05 04:45:36 +0800
+ * @LastEditTime: 2019-09-05 05:19:43 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -14,5 +14,5 @@
 void Rec_File_From_Client(int Fd_of_Send);
 void Send_File_To_Server(int Client_Socket_Fd);
 void Send_File_To_Client(int Fd_of_Rec,char Name[]);
-void Send_File_To_Server(int Client_Socket_Fd);
+void Rec_File_From_Server(int Client_Socket_Fd);
 #endif
