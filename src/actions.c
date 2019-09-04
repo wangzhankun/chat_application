@@ -4,12 +4,13 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-04 22:18:25 +0800
+ * @LastEditTime: 2019-09-04 23:47:53 +0800
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "actions.h"
+#include "Queue.h"
 #include "DataTransformInterface.h"
 // #define SERVER_PORT 8888
 // #define SERVER_ADDR "192.168.43.19"
@@ -105,18 +106,19 @@ void *createNewSKFToReceiveMSG(void *skf)
 {
     socketfd sock = *((socketfd *)skf);
     char buf[1024];
+    memset(buf, 0, sizeof(buf));
     receiveMSG(sock, buf, sizeof(buf), 0);
     printf("%s\n",buf);
     cJSON *data = (cJSON *)buf;
-    memset(buf, 0, sizeof(buf));
     getTypeFromCJSON(data, buf);
     if (strcmp(buf, "user_file") == 0) //成功匹配
     {
     }
     else
     {
+        PushMessage(buf);
     }
-    printf("%s\n", buf);
+    printf("%s\n", (char*)buf);
     close(sock);
     printf("closed\n");
 }
