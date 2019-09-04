@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-01 10:03:32 +0800
- * @LastEditTime: 2019-09-05 03:20:45 +0800
+ * @LastEditTime: 2019-09-05 04:21:04 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -16,7 +16,9 @@ void getLocalIP(char*);
 
 void startListen();
 
-int sendTextToServer(char* data);
+int sendTextToServer(cJSON* data, char*ip);
+
+int sendTextToClient(cJSON* data, char* ip);
 
 // void reUse(socketfd skf);
 

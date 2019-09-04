@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-05 03:27:52 +0800
+ * @LastEditTime: 2019-09-05 04:27:01 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -179,16 +179,40 @@ void startListen()
 
 /**
  * @Author: 王占坤
- * @Description: 用于客户端发送消息到接收方的接口
- * @Param: 
+ * @Description: 用于服务器发送消息到客户端的接口
+ * @Param: cJSON* data 需要发送的信息
+ * @Param: char* ip  填写需要接收信息的客户端
  * @Return: 
  * @Throw: 
  */
-int sendTextToServer(char *data)
+int sendTextToClient(cJSON *data, char *ip)
 {
-    char *buf = cJSON_Print((cJSON*)data);
-    cJSON_Delete((cJSON*)data);
-    printf("%s\n",buf);
+    char *buf = cJSON_Print((cJSON *)data);
+    strcpy(IP, ip);
+    cJSON_Delete((cJSON *)data);
+    printf("%s\n", buf);
+    socketfd skf = createSocket(SOCK_STREAM, 0);
+    struct sockaddr_in ser_addr;
+    initialzeSocketaddr(&ser_addr, IP, SERVER_PORT);
+    createConnection(skf, (struct sockaddr *)&ser_addr, sizeof(ser_addr));
+    sendMSG(skf, buf, BUFFER_SIZE, 0);
+    free(buf);
+    close(skf);
+}
+
+/**
+ * @Author: 王占坤
+ * @Description: 用于客户端发送消息到服务器的接口
+ * @Param: cJSON* data 需要发送的信息
+ * @Param: char* ip  填写NULL即可
+ * @Return: 
+ * @Throw: 
+ */
+int sendTextToServer(cJSON *data, char *ip)
+{
+    char *buf = cJSON_Print((cJSON *)data);
+    cJSON_Delete((cJSON *)data);
+    printf("%s\n", buf);
     socketfd skf = createSocket(SOCK_STREAM, 0);
     struct sockaddr_in ser_addr;
     initialzeSocketaddr(&ser_addr, SERVER_ADDR, SERVER_PORT);
