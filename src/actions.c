@@ -357,6 +357,8 @@ int main(int argc, char *argv[])
 
     bindSocketAddr(server_socket, (struct sockaddr *)&addr, sizeof(addr));
 
+    bindSocketAddr(server_socket, (struct sockaddr *)&addr, sizeof(addr));
+
     // printf("%d\n", listen(server_socket, 5));
     createListen(server_socket, 5);
 
