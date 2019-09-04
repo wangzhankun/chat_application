@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-04 11:13:35 +0800
+ * @LastEditTime: 2019-09-04 11:43:03 +0800
  * @LastEditors: 
  * @Description: 
  */
@@ -44,12 +44,60 @@ void reUse(socketfd skf)
         perror("setsockopt");
     }
 }
-
+void *thread_hander(void *arg)
+{
+    int sock = *((int *)arg);
+    char buf[1024];
+    receiveMSG(sock, buf, sizeof(buf), 0);
+    printf("%s\n", buf);
+    close(sock);
+    printf("closed\n");
+}
+int recvMSGFromClient(socketfd ser_skf)
+{
+    // printf("waiting!\n");
+    // int sock = accept(ser_skf, NULL, NULL);
+    socketfd sock = acceptConnection(ser_skf, NULL, NULL);
+    pthread_t tid;
+    int ret = pthread_create(&tid, NULL, thread_hander, &sock);
+    if (ret < 0)
+    {
+        perror("pthread_create");
+        return 6;
+    }
+    pthread_detach(tid);
+}
+socketfd startServerTillListen()
+{
+    socketfd ser_skf = createSocket(SOCK_STREAM, 0);
+    struct sockaddr_in ser_addr;
+    initialzeSocketaddr((struct sockaddr *)&ser_addr, SERVER_ADDR, SERVER_PORT);
+    bindSocketAddr(ser_skf, (struct sockaddr *)&ser_addr, sizeof(ser_addr));
+    struct sockaddr_in client;
+    createListen(ser_skf, 200);
+    return ser_skf;
+}
 
 
 
 
 ///////////////允许外部调用的函数////////////////////
+
+/**
+ * @Author: 王占坤
+ * @Description: 这个是需要在客户端启用的接收信息的进程
+ * @Param: 
+ * @Return: 
+ * @Throw: 
+ */
+void startListen()
+{
+    socketfd ser_skf = startServerTillListen();
+    while (1)
+    {
+        recvMSGFromClient(ser_skf);
+    }
+}
 
 
 int sendTextToServer(char *data)
@@ -239,8 +287,8 @@ int receiveMSG(socketfd skf, char *buff, size_t n_bytes, int flag)
     if (n_bytes > BUFFER_SIZE)
         n_bytes = BUFFER_SIZE - 1;
     int num_of_reading_words = recv(skf, buff, n_bytes, flag);
-    printf("num_of_reading_words: %d\n", num_of_reading_words);
-    printf("%s\n", buff);
+    // printf("num_of_reading_words: %d\n", num_of_reading_words);
+    // printf("%s\n", buff);
     if (num_of_reading_words == -1) //失败
     {
         printf("receive message error: %s(errno: %d)\n", strerror(errno), errno);
