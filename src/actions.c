@@ -4,14 +4,14 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-30 21:22:06 +0800
- * @LastEditTime: 2019-09-03 13:12:12 +0800
+ * @LastEditTime: 2019-09-03 03:00:18 -0700
  * @LastEditors: 
  * @Description: 
  */
 #include "head.h"
 #include "actions.h"
 #define SERVER_PORT 8888
-#define SERVER_ADDR "0.0.0.0"
+#define SERVER_ADDR "192.168.43.18"
 // #define TEST
 // // #define UDP
 // #define TCP
@@ -37,7 +37,7 @@
  */
 void reUse(socketfd skf)
 {
-    INT16 optval = 1;
+    int optval = 1;
     int res = setsockopt(skf, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
     if(res == -1)
     {
