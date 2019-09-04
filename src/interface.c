@@ -158,7 +158,7 @@ GtkWidget *CreateTalkWindow(char * name)
     SeeText.view_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(SeeText.view));
 
     //创建指针保存聊天信息编辑窗口和显示窗口的位置
-    FromToWin *chatwin = (FromToWin *)malloc(sizeof(FromToWin));
+    chatwin = (FromToWin *)malloc(sizeof(FromToWin));
     chatwin->from = SendText.view_buffer;
     chatwin->to = SeeText.view_buffer;
 
