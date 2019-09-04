@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-03 01:54:27 -0700
+ * @LastEditTime: 2019-09-04 05:31:29 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -65,7 +65,10 @@ typedef struct text_view_info{
     GtkTextBuffer *view_buffer;
 }TextView;
 
-
+typedef struct Background{
+    int type;
+    GtkWidget *view;
+}BackGround;
 
 ///////////////////////////函数声明区////////////////////////////////
 void on_send(GtkButton * button,FromToWin* ftw);

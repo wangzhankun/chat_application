@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-02 03:31:32 -0700
- * @LastEditTime: 2019-09-03 19:47:56 -0700
+ * @LastEditTime: 2019-09-04 05:31:44 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -48,6 +48,7 @@ GtkWidget * CreateFriendlist(void)
     //gtk_widget_set_size_request(GTK_LIST(gtklist), 300, 300);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), gtklist);
     g_signal_connect(G_OBJECT(gtklist), "selection_changed", G_CALLBACK(sigh_print_selection), NULL);
+    //g_signal_connect(G_OBJECT(gtklist), "clicked", G_CALLBACK(sigh_print_selection), NULL);
 /////////////传入数据
     for (i = 0; i < 100; i++)
     {
@@ -76,10 +77,13 @@ void sigh_print_selection(GtkWidget *gtklist, gpointer func_data)
     while (dlist)
     {
         GtkWidget *TalkWindow;
+        
         const gchar *item_data_string;
         item_data_string = g_object_get_data(G_OBJECT(dlist->data), list_item_data_key);
         g_print("%s ", item_data_string);
+        
         TalkWindow=CreateTalkWindow(item_data_string);
+        
         g_thread_create((GThreadFunc)auto_update_thread, NULL, FALSE, NULL);
         gtk_widget_show(TalkWindow);
         dlist = dlist->next;
@@ -99,8 +103,14 @@ void list_add(int i)
     gchar buffer[64];
     GtkWidget *list_item;
     gchar *string;
+    PangoFontDescription *desc;
     sprintf(buffer, "%d", i);
+    //label=gtk_button_new_with_label(buffer);
     label = gtk_label_new(buffer);
+    
+    gtk_misc_set_alignment(GTK_MISC(label), 0, 1);
+    desc = pango_font_description_from_string(" 22");
+    gtk_widget_modify_font(label, desc);
     list_item = gtk_list_item_new();
     gtk_container_add(GTK_CONTAINER(list_item), label);
     gtk_widget_show(label);

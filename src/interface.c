@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 19:08:01 -0700
- * @LastEditTime: 2019-09-03 07:42:18 -0700
+ * @LastEditTime: 2019-09-04 05:31:36 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -13,7 +13,7 @@
 #include "interface.h"
 #include "mainprogram.h"
 
-TextView SendText,SeeText;
+TextView SendText, SeeText;
 GtkWidget *CreateSendToolbar(GtkWidget *window);
 GtkWidget *CreateMainToolbar(GtkWidget *window);
 GtkWidget *CreateS(GtkWidget *window);
@@ -107,7 +107,7 @@ GtkWidget *CreateMainWindow(void)
  * @Param: 
  * @Return: 
  */
-GtkWidget *CreateTalkWindow(char * name)
+GtkWidget *CreateTalkWindow(char *name)
 {
     GtkWidget *TalkWindow;
     GtkWidget *scrolledwinup, *scrolledwindown;
@@ -120,8 +120,10 @@ GtkWidget *CreateTalkWindow(char * name)
 
     TalkWindow = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(TalkWindow), name);
+
     gtk_window_set_default_size(GTK_WINDOW(TalkWindow), 800, 500);
-    gtk_window_set_position(GTK_WINDOW(TalkWindow), GTK_WIN_POS_CENTER);
+
+    gtk_window_set_position(GTK_WINDOW(TalkWindow), GTK_WIN_POS_NONE);
     gtk_container_set_border_width(GTK_CONTAINER(TalkWindow), 10);
 
     hPaned = gtk_hpaned_new();
@@ -200,16 +202,15 @@ GtkWidget *CreateSendToolbar(GtkWidget *window)
 {
 
     GtkWidget *toolbar;
-    GtkWidget *StickerIcon, *DocuIcon,* RecIcon;
+    GtkWidget *StickerIcon, *DocuIcon, *RecIcon;
     GtkWidget *sticker;
-    GtkWidget* record;
+    GtkWidget *record;
     GtkToolItem *OpenDocu;
-
 
     toolbar = gtk_toolbar_new();
     StickerIcon = gtk_image_new_from_file("./bin/pic/pic.png");
     DocuIcon = gtk_image_new_from_file("./bin/pic/document.png");
-    RecIcon=gtk_image_new_from_file("./bin/pic/record.png");
+    RecIcon = gtk_image_new_from_file("./bin/pic/record.png");
     gtk_toolbar_set_style(GTK_TOOLBAR(toolbar), GTK_TOOLBAR_ICONS);
 
     sticker = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "发送表情", "Private", StickerIcon,
@@ -231,15 +232,21 @@ GtkWidget *CreateSendToolbar(GtkWidget *window)
 GtkWidget *CreateMainToolbar(GtkWidget *window)
 {
     GtkWidget *toolbar;
-    GtkWidget *StickerIcon, *DocuIcon;
-    GtkWidget *sticker;
-    GtkToolItem *OpenDocu;   
+    GtkWidget *EditIcon, *SettingIcon, *PaintIcon;
+    GtkWidget *setting, *edit;
+    GtkToolItem *OpenDocu;
 
     toolbar = gtk_toolbar_new();
-    StickerIcon = gtk_image_new_from_file("./bin/pic/setting.png");
+    SettingIcon = gtk_image_new_from_file("./bin/pic/switch.png");
+    EditIcon = gtk_image_new_from_file("./bin/pic/edit.png");
+    PaintIcon = gtk_image_new_from_file("./bin/pic/paint.png");
 
-    sticker = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "设置", "Private", StickerIcon,
-                                      GTK_SIGNAL_FUNC(BackToLoading) , NULL);                                  
+    setting = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "切换账号", "Private", SettingIcon,
+                                      GTK_SIGNAL_FUNC(BackToLoading), NULL);
+    edit = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "修改资料", "Private", EditIcon,
+                                   GTK_SIGNAL_FUNC(EditInformation), NULL);
+    edit = gtk_toolbar_append_item(GTK_TOOLBAR(toolbar), "", "修改资料", "Private", PaintIcon,
+                                   GTK_SIGNAL_FUNC(EditBackground), NULL);
     return toolbar;
 }
 
@@ -278,4 +285,3 @@ static void ReceiveDrop(GtkWidget *widget, GdkDragContext *context,
     }
     gtk_drag_finish(context, TRUE, TRUE, time);
 }
-
