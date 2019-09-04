@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 06:01:47 -0700
- * @LastEditTime: 2019-09-03 03:59:56 -0700
+ * @LastEditTime: 2019-09-04 05:31:26 -0700
  * @LastEditors: Please set LastEditors
  */
 #ifndef __CALLBACKS_H__
@@ -21,6 +21,8 @@ void PressStickerBtn(GtkWidget *widget, GdkEvent *event, struct text_view_info *
 void destory_sticker_window(GtkWidget *widget,GdkEventCrossing *event,GtkWidget* data);
 void on_cancel (GtkButton *button,gpointer data);
 void on_ok (GtkButton* button, gpointer data);
-
+void EditInformation(GtkMenuItem *menuitem, gpointer data);
+void EditBackground(GtkMenuItem *menuitem, gpointer data);
+void ClickedGroup(GtkWidget *button, gpointer window);
 #endif
 

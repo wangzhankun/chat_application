@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-08-31 09:02:24 -0700
- * @LastEditTime: 2019-09-03 01:54:27 -0700
+ * @LastEditTime: 2019-09-04 09:04:26 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -34,6 +34,7 @@ typedef struct _WinAppear
 typedef struct SelfInfo{
     char *NickName;
     char *ID;
+    char *Motto;
 }Self;
 
 //头像结构
@@ -65,15 +66,18 @@ typedef struct text_view_info{
     GtkTextBuffer *view_buffer;
 }TextView;
 
-
+typedef struct Background{
+    int type;
+    GtkWidget *view;
+}BackGround;
 
 ///////////////////////////函数声明区////////////////////////////////
 void on_send(GtkButton * button,FromToWin* ftw);
 GtkWidget* CreateMainWindow( void );
 GtkWidget* CreateTalkWindow( char * name );
 GtkWidget* CreateLoading(void);
-GtkWidget* CreateFriendlist(void);
-
+GtkWidget * CreateFriendlist(GtkWidget *page);
+GtkWidget* CreateGrouplist(GtkWidget *page);
 
 FromToWin *chatwin;
 #endif

@@ -1,5 +1,5 @@
 /*
- * @Copyright: CS of BIT
+ @Copyright: CS of BIT
  * @Author: 王占坤
  * @File name: 
  * @Version: 

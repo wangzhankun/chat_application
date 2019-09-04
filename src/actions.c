@@ -88,7 +88,7 @@ void getLocalIP(char *IP)
  */
 void reUse(socketfd skf)
 {
-    INT16 optval = 1;
+    int optval = 1;
     int res = setsockopt(skf, SOL_SOCKET, SO_REUSEPORT, &optval, sizeof(optval));
     if (res == -1)
     {

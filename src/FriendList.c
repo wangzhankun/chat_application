@@ -4,7 +4,7 @@
  * @File name: 
  * @Version: 
  * @Date: 2019-09-02 03:31:32 -0700
- * @LastEditTime: 2019-09-04 16:01:37 +0800
+ * @LastEditTime: 2019-09-04 09:11:55 -0700
  * @LastEditors: 
  * @Description: 
  */
@@ -25,7 +25,7 @@ static void sigh_print_selection(GtkWidget *gtklist, gpointer func_data);
  * @Param: 
  * @Return: 
  */
-GtkWidget *CreateFriendlist(void)
+GtkWidget * CreateFriendlist(GtkWidget *page)
 {
     GtkWidget *vbox;
     GtkWidget *view;
@@ -34,7 +34,6 @@ GtkWidget *CreateFriendlist(void)
     GList *dlist;
     guint i;
 
-    g_printf("aaaa");
     vbox = gtk_vbox_new(FALSE, 0);
 
     // gtk_container_add(GTK_CONTAINER(window), vbox);
@@ -44,11 +43,10 @@ GtkWidget *CreateFriendlist(void)
     gtk_scrolled_window_set_policy(scrolled_window, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
     gtklist = gtk_list_new();
-    // GList=gtklist->priv;
-    //gtk_widget_set_size_request(GTK_LIST(gtklist), 300, 300);
     gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(scrolled_window), gtklist);
     g_signal_connect(G_OBJECT(gtklist), "selection_changed", G_CALLBACK(sigh_print_selection), NULL);
-    /////////////传入数据
+    //g_signal_connect(G_OBJECT(gtklist), "clicked", G_CALLBACK(sigh_print_selection), NULL);
+/////////////传入数据
     for (i = 0; i < 100; i++)
     {
         list_add(i);
@@ -81,16 +79,13 @@ void sigh_print_selection(GtkWidget *gtklist, gpointer func_data)
     while (dlist)
     {
         GtkWidget *TalkWindow;
+        
         const gchar *item_data_string;
         item_data_string = g_object_get_data(G_OBJECT(dlist->data), list_item_data_key);
         g_print("%s ", item_data_string);
-
-        // g_thread_create((GThreadFunc)thread_run, NULL, FALSE, NULL);
-
-        // pthread_create()
-
+        
         TalkWindow=CreateTalkWindow(item_data_string);
-
+        
         g_thread_create((GThreadFunc)auto_update_thread, NULL, FALSE, NULL);
         gtk_widget_show(TalkWindow);
         dlist = dlist->next;
@@ -109,9 +104,14 @@ void list_add(int i)
     GtkWidget *label;
     gchar buffer[64];
     GtkWidget *list_item;
+    PangoFontDescription *desc;
     gchar *string;
     sprintf(buffer, "%d", i);
+    //label=gtk_button_new_with_label(buffer);
     label = gtk_label_new(buffer);
+    gtk_misc_set_alignment(GTK_MISC(label), 0.15, 0.6);
+    desc = pango_font_description_from_string("16");
+    gtk_widget_modify_font(label, desc);
     list_item = gtk_list_item_new();
     gtk_container_add(GTK_CONTAINER(list_item), label);
     gtk_widget_show(label);
